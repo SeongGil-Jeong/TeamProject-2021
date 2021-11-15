@@ -5,5 +5,9 @@
     <typeAliases>
     	<!-- 사용할 DTO 등록  -->
 		<typeAlias type="poly.dto.DummyDTO" alias="DummyDTO"/>
+        <typeAlias type="poly.dto.UserDTO" alias="UserDTO"/>
+        <typeAlias type="poly.dto.BusinessDTO" alias="BusinessDTO"/>
+        <typeAlias type="poly.dto.ClothesDTO" alias="ClothesDTO"/>
+        <typeAlias type="poly.dto.OrderDTO" alias="OrderDTO"/>
     </typeAliases>
 </configuration>
