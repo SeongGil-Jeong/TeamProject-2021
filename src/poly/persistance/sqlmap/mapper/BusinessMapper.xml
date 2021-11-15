@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+
+<mapper namespace="poly.persistance.mapper.IBusinessMapper">
+	<!--사업자 회원가입-->
+	<insert id="insertBusiness" parameterType="BusinessDTO">
+		INSERT INTO teamPRJ.BUSINESS_INFO
+		(BNS_ID,
+		 BNS_PASSWORD,
+		 BNS_NAME,
+		 BNS_CODE,
+		 BNS_ADDR,
+		 BNS_ADDR2)
+		VALUES
+		(#{bns_id},
+		 #{bns_password},
+		 #{bns_name},
+		 #{bns_code},
+		 #{bns_addr},
+		 #{bns_addr2})
+	</insert>
+	<!--중복 조회-->
+	<select id="getBnsExists" parameterType="BusinessDTO" resultType="BusinessDTO">
+		SELECT IF(COUNT(1) = 0, 'N', 'Y') AS EXISTS_YN
+		FROM teamPRJ.BUSINESS_INFO
+		WHERE BNS_ID = #{bns_id} OR BNS_CODE = #{bns_code}
+	</select>
+	<!--사업자 로그인-->
+	<select id="businessLogin" parameterType="BusinessDTO" resultType="BusinessDTO">
+		SELECT BNS_ID, BNS_NAME, BNS_SEQ
+		FROM teamPRJ.BUSINESS_INFO
+		WHERE BNS_ID = #{bns_id} AND BNS_PASSWORD = #{bns_password}
+	</select>
+
+	<!--사업자 목록 조회하기 / (USER) LIKE_BRANCH 설정 시 사용-->
+	<select id="selectBnsName" resultType="BusinessDTO">
+		SELECT BNS_NAME FROM teamPRJ.BUSINESS_INFO
+	</select>
+
+</mapper>

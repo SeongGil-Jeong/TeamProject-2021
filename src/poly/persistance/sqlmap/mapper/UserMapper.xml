@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+
+<mapper namespace="poly.persistance.mapper.IUserMapper">
+    <!--사용자 회원가입-->
+    <insert id="insertUser" parameterType="UserDTO">
+        INSERT INTO teamPRJ.USER_INFO
+            (
+             USER_ID,
+             USER_NAME,
+             USER_NIC,
+             USER_PASSWORD,
+             EMAIL,
+             LIKE_BRANCH,
+             USER_ADDR,
+             USER_ADDR2
+            ) VALUES
+                (
+                    #{user_id},
+                    #{user_name},
+                    #{user_nic},
+                    #{user_password},
+                    #{email},
+                    #{like_branch},
+                    #{user_addr},
+                    #{user_addr2}
+                )
+    </insert>
+
+    <!-- 이메일로 회원 가입 중복 방지하기 -->
+    <select id="getUserExists" parameterType="UserDTO" resultType="UserDTO">
+        SELECT IF(COUNT(1) = 0, 'N', 'Y') AS EXISTS_YN
+        FROM teamPRJ.USER_INFO
+        WHERE USER_ID = #{user_id} OR EMAIL = #{email}
+    </select>
+
+    <!--  로그인을 위해 아이디와 비밀번호가 일치하는지 확인하기 -->
+    <select id="getUserLoginCheck" parameterType="UserDTO" resultType="UserDTO">
+        SELECT USER_SEQ, USER_ID, USER_NAME, EMAIL, USER_ADDR, USER_ADDR2, LIKE_BRANCH
+        FROM teamPRJ.USER_INFO
+        WHERE USER_ID = #{user_id} AND USER_PASSWORD = #{user_password}
+    </select>
+
+</mapper>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+
+<mapper namespace="poly.persistance.mapper.IOrderMapper">
+	<!--사업자 주문 조회-->
+	<select id="bnsSelectOrder" parameterType="BusinessDTO" resultType="OrderDTO">
+		SELECT ORDER_SEQ, CLOTHES_CNT, CLOTHES_CONTENTS, ORDER_STATUS, ORDER_DT, USER_SEQ
+		FROM teamPRJ.ORDER_INFO
+		WHERE BNS_SEQ = #{bns_seq}
+	</select>
+	<!--주문 상태 변경하기 / 사업자가 다음 단계로 클릭시 준비중 -> 세탁중으로 변경-->
+	<update id="updateStatus" parameterType="OrderDTO">
+		UPDATE teamPRJ.ORDER_INFO SET
+			ORDER_STATUS = ORDER_STATUS + 1 WHERE ORDER_SEQ = #{order_seq}
+	</update>
+
+</mapper>
