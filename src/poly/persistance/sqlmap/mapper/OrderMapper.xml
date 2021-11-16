@@ -15,4 +15,10 @@
 			ORDER_STATUS = ORDER_STATUS + 1 WHERE ORDER_SEQ = #{order_seq}
 	</update>
 
+	<select id="userSelectOrder" parameterType="UserDTO" resultType="OrderDTO">
+	SELECT ORDER_SEQ, CLOTHES_CNT, CLOTHES_CONTENTS, ORDER_STATUS, ORDER_DT, USER_SEQ
+	FROM teamPRJ.ORDER_INFO
+	WHERE USER_SEQ = #{user_seq}
+	</select>
+
 </mapper>

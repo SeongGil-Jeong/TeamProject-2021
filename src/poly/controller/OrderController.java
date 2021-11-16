@@ -1,11 +1,13 @@
 package poly.controller;
 
 import org.apache.log4j.Logger;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import poly.dto.BusinessDTO;
 import poly.dto.OrderDTO;
+import poly.dto.UserDTO;
 import poly.service.IOrderService;
 import poly.util.CmmUtil;
 
@@ -49,14 +51,47 @@ public class OrderController {
             log.info(e.toString());
             e.printStackTrace();
         }finally {
-            log.info(this.getClass().getName() + ".business/bnsSelectOrder end!");
+            log.info(this.getClass().getName() + ".order/bnsSelectOrder end!");
             model.addAttribute("msg", msg);
 
             return "/business/bnsMain";
         }
     }
 
-    @RequestMapping("order/updateStatus") // 주문 상태 변경하기
+    @RequestMapping(value = "order/userSelectOrder") // 사용자 주문 조회하기
+    public String userSelectOrder(HttpServletRequest request, HttpSession session, ModelMap model) throws Exception {
+        log.info(this.getClass().getName() + ".order/userSelectOrder Start!");
+        String msg = "";
+        try {
+            String SS_USER_SEQ = CmmUtil.nvl((String) session.getAttribute("SS_USER_SEQ"));
+            log.info("SS_USER_SEQ : " + SS_USER_SEQ);
+            UserDTO pDTO = new UserDTO();
+            pDTO.setUser_seq(SS_USER_SEQ);
+
+            List<OrderDTO> rList = orderService.userSelectOrder(pDTO);
+
+            if (rList == null) {
+                rList = new ArrayList<OrderDTO>();
+                msg = "주문이 없습니다";
+            } else {
+                msg = rList.size() + "개의 주문이 있습니다";
+            }
+            model.addAttribute("msg", msg);
+            model.addAttribute("rList", rList);
+        } catch (Exception e) {
+            msg = "실패하였습니다 :" + e.toString();
+            System.out.println("오류로 인해 주문을 불러올 수 없습니다");
+            log.info(e.toString());
+            e.printStackTrace();
+        }finally {
+            log.info(this.getClass().getName() + ".order/userSelectOrder end!");
+            model.addAttribute("msg", msg);
+
+            return "/user/userMain";
+        }
+    }
+
+    @RequestMapping(value = "order/updateStatus") // 주문 상태 변경하기
     public String updateStatus(HttpServletRequest request, ModelMap model) throws Exception {
         log.info(this.getClass().getName() + ".business/updateStatus start!");
         String msg = "";

@@ -5,8 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import poly.dto.BusinessDTO;
+import poly.dto.OrderDTO;
 import poly.dto.UserDTO;
 import poly.service.IBusinessService;
+import poly.service.IOrderService;
 import poly.service.IUserService;
 import poly.util.CmmUtil;
 import poly.util.EncryptUtil;
@@ -14,6 +16,7 @@ import poly.util.EncryptUtil;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -23,6 +26,9 @@ public class UserController {
 
     @Resource(name = "BusinessService")
     private IBusinessService businessService;
+
+    @Resource(name = "OrderService")
+    private IOrderService orderService;
 
     private Logger log = Logger.getLogger(this.getClass());
 
@@ -38,9 +44,22 @@ public class UserController {
     }
 
     @RequestMapping(value = "user/userMain") // 사용자 main page 이동
-    public String userMain() throws Exception {
+    public String userMain(HttpServletRequest request, HttpSession session, ModelMap model) throws Exception {
         log.info(this.getClass().getName() + ".user/userMain ok!");
-        // 주문 목록 확인을 위해서 user_seq로 조회하는 부분 필요
+        String SS_USER_SEQ = CmmUtil.nvl((String) session.getAttribute("SS_USER_SEQ"));
+        String msg = "";
+        UserDTO pDTO = new UserDTO();
+        pDTO.setUser_seq(SS_USER_SEQ);
+        List<OrderDTO> rList = orderService.userSelectOrder(pDTO);
+        if (rList == null) {
+            rList = new ArrayList<OrderDTO>();
+            msg = "주문이 없습니다";
+        } else {
+            msg = rList.size() + "개의 주문이 있습니다";
+        }
+
+        model.addAttribute("rList", rList);
+        model.addAttribute("msg", msg);
 
         return "/user/userMain";
     }

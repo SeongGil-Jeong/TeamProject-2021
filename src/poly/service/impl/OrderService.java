@@ -3,6 +3,7 @@ package poly.service.impl;
 import org.springframework.stereotype.Service;
 import poly.dto.BusinessDTO;
 import poly.dto.OrderDTO;
+import poly.dto.UserDTO;
 import poly.persistance.mapper.IOrderMapper;
 import poly.service.IOrderService;
 
@@ -22,5 +23,10 @@ public class OrderService implements IOrderService {
     @Override // 주문 상태 변경 (사업자)
     public int updateStatus(OrderDTO pDTO) throws Exception {
         return orderMapper.updateStatus(pDTO);
+    }
+
+    @Override // 사용자 주문 조회 / USER_SEQ = #{user_seq}
+    public List<OrderDTO> userSelectOrder(UserDTO pDTO) throws Exception {
+        return orderMapper.userSelectOrder(pDTO);
     }
 }
