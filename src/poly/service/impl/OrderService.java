@@ -29,4 +29,9 @@ public class OrderService implements IOrderService {
     public List<OrderDTO> userSelectOrder(UserDTO pDTO) throws Exception {
         return orderMapper.userSelectOrder(pDTO);
     }
+
+    @Override // 사용자 주문 확인 / 주문 삭제 / ORDER_STATUS = 3 AND ORDER_SEQ = #{order_seq}
+    public int deleteOrder(OrderDTO pDTO) throws Exception {
+        return orderMapper.deleteOrder(pDTO);
+    }
 }

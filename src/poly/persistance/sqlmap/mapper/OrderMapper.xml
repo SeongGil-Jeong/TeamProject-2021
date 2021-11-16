@@ -14,11 +14,16 @@
 		UPDATE teamPRJ.ORDER_INFO SET
 			ORDER_STATUS = ORDER_STATUS + 1 WHERE ORDER_SEQ = #{order_seq}
 	</update>
-
+	<!--사용자 주문 조회-->
 	<select id="userSelectOrder" parameterType="UserDTO" resultType="OrderDTO">
 	SELECT ORDER_SEQ, CLOTHES_CNT, CLOTHES_CONTENTS, ORDER_STATUS, ORDER_DT, USER_SEQ
 	FROM teamPRJ.ORDER_INFO
 	WHERE USER_SEQ = #{user_seq}
 	</select>
+	<!--세탁 완료 ORDER_STATUS 가 3일 때 사용자가 확인 완료 선택 시 주문을 지우는 쿼리-->
+	<delete id="deleteOrder" parameterType="OrderDTO">
+		DELETE FROM teamPRJ.ORDER_INFO
+		WHERE ORDER_SEQ = #{order_seq} AND USER_SEQ = #{user_seq}
+	</delete>
 
 </mapper>

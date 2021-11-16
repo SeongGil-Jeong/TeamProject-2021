@@ -91,6 +91,47 @@ public class OrderController {
         }
     }
 
+    @RequestMapping(value = "order/deleteOrder") // 세탁 완료 확인 후 사용자가 마지막으로 주문 확정 선택 시 주문 삭제
+    public String deleteOrder(HttpServletRequest request, HttpSession session, ModelMap model) throws Exception {
+        log.info(this.getClass().getName() + ".order/deleteOrder start!");
+        String msg = "";
+        String url = "";
+
+        try {
+            String SS_USER_SEQ = CmmUtil.nvl((String) session.getAttribute("SS_USER_SEQ")); // 다른 사용자 접근 방지
+            log.info("SS_USER_SEQ : " + SS_USER_SEQ);
+
+            String order_seq = CmmUtil.nvl(request.getParameter("order_seq"));
+            log.info("order_seq : " + order_seq);
+
+            OrderDTO pDTO = new OrderDTO();
+
+            pDTO.setOrder_seq(order_seq);
+            pDTO.setUser_seq(SS_USER_SEQ);
+
+            int res = orderService.deleteOrder(pDTO);
+
+            if (res == 1) {
+                msg = "주문 확인 성공";
+                url = "/user/userMain.do";
+            } else {
+                msg = "주문 확인 실패";
+                url = "/user/userMain.do";
+            }
+        } catch (Exception e) {
+            msg = "실패하였습니다 :" + e.toString();
+            System.out.println("오류로 인해 주문 확인을 실행할 수 없습니다");
+            log.info(e.toString());
+            e.printStackTrace();
+
+        }finally {
+            model.addAttribute("msg", msg);
+            model.addAttribute("url", url);
+            return "/redirect";
+        }
+
+    }
+
     @RequestMapping(value = "order/updateStatus") // 주문 상태 변경하기
     public String updateStatus(HttpServletRequest request, ModelMap model) throws Exception {
         log.info(this.getClass().getName() + ".business/updateStatus start!");
@@ -123,7 +164,6 @@ public class OrderController {
             return "/redirect";
 
         }
-
 
     }
 

@@ -12,4 +12,6 @@ public interface IOrderService {
     int updateStatus(OrderDTO pDTO) throws Exception;
 
     List<OrderDTO> userSelectOrder(UserDTO pDTO) throws Exception;
+
+    int deleteOrder(OrderDTO pDTO) throws Exception;
 }

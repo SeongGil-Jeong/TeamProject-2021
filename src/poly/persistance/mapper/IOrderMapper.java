@@ -14,4 +14,6 @@ public interface IOrderMapper {
     List<OrderDTO> userSelectOrder(UserDTO pDTO) throws Exception; // 사용자 주문 조회
 
     int updateStatus(OrderDTO pDTO) throws Exception; // 사업자가 주문 상태 변경 준비중 -> 세탁중
+
+    int deleteOrder(OrderDTO pDTO) throws Exception; // 사용자가 status(3) / 세탁 완료인 주문을 확인 후 주문 확정을 선택 시 주문 삭제
 }

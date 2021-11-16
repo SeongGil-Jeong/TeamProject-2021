@@ -23,7 +23,6 @@
 <html>
 <head>
     <title>유저 Main 화면</title>
-    <div align="right" style="float: right">USER_ID : <%=SS_USER_ID%><br/>USER_NAME : <%=SS_USER_NAME%><br/>
 <%--        <a href="/business/bnsLogout.do">로그아웃</a>--%>
     </div>
     <script type="text/javascript">
@@ -33,6 +32,18 @@
                 alert("로그인된 사용자만 접근 가능합니다.");
                 top.location.href="/index.do";
             }
+        }
+
+        function deleteOrder(status, order_seq){
+
+            if (status != 3){ // 세탁 완료 상태가 아닌 주문중, 세탁 중일경우 변경 불가능
+                alert("세탁 완료 상태가 아닙니다.");
+
+            }else {
+                var user_seq = "<%=SS_USER_SEQ%>";
+                top.location.href = "/order/deleteOrder.do?user_seq=" + user_seq + "&order_seq=" + order_seq;
+            }
+
         }
         // 주문 삭제 함수 추가 (세탁 완료 시 주문 삭제)
     </script>
@@ -73,7 +84,11 @@ USER_NAME : <%=SS_USER_NAME%>
         <td align="center"><%=rDTO.getClothes_contents()%></td>
         <td align="center"><%=status%></td>
         <td align="center"><%=rDTO.getOrder_dt().substring(0, 10)%></td>
-        <td align="center"><a href="javascript:checkUpdate('<%=rDTO.getOrder_status()%>','<%=rDTO.getOrder_seq()%>')">상태변경</a></td>
+        <%
+            if (rDTO.getOrder_status().equals("3")){
+        %>
+        <td align="center"><a href="javascript:deleteOrder('<%=rDTO.getOrder_status()%>','<%=rDTO.getOrder_seq()%>')">주문 확인</a></td>
+            <%}%>
     </tr>
     <%
         }
