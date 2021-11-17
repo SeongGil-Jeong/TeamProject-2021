@@ -156,7 +156,7 @@
 
         <!-- Nav Item - Tables -->
         <li class="nav-item">
-            <a class="nav-link" href="tables.html">
+            <a class="nav-link" href="/order/bnsSelectAllOrder.do">
                 <i class="fas fa-fw fa-table"></i>
                 <span>Tables</span></a>
         </li>
@@ -574,10 +574,12 @@
 
                         <!-- Project Card Example -->
                         <div class="card shadow mb-4">
+                            <a href="/order/bnsSelectAllOrder.do">
                             <div class="card-header py-3">
 <%--                                OrderList Code--%>
                                 <h6 class="m-0 font-weight-bold text-primary">OrderList</h6>
                             </div>
+                            </a>
                             <div class="card-body">
                                 <% for (int i = 0; i < rList.size(); i++) {
                                     OrderDTO rDTO = rList.get(i);
