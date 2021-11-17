@@ -16,7 +16,7 @@
     <title>SB Admin 2 - Login</title>
 
     <!-- Custom fonts for this template-->
-    <link href="/resourcesvendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="/resources/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
             href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
             rel="stylesheet">
@@ -65,7 +65,7 @@
                                     <input type="submit" class="btn btn-primary btn-user btn-block" value="Login">
                                     <hr>
                                     <a href="/business/bnsLoginForm.do" class="btn btn-google btn-user btn-block">
-                                        <i class="fab fa-google fa-fw"></i> 사업자로 로그인하기
+                                        사업자로 로그인하기
                                     </a>
                                 </form>
                                 <hr>
