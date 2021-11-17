@@ -57,7 +57,7 @@ public class OrderController {
             return "/business/bnsMain";
         }
     }
-    @RequestMapping(value = "order/bnsSelectAllOrder") // 사업자가 Order table 클릭 시 모든 주문을 조회하여 보여주기
+    @RequestMapping(value = "order/bnsSelectAllOrder") // 사업자가 Order table 클릭 시 모든 주문을 조회하여 보여주기 && Tables page 이동
     public String bnsSelectAllOrder(HttpServletRequest request, HttpSession session, ModelMap model) throws Exception {
         log.info(this.getClass().getName() + ".order/bnsSelectAllOrder Start!");
         try {
@@ -70,9 +70,10 @@ public class OrderController {
             List<OrderDTO> rList = orderService.bnsSelectOrder(pDTO);
 
             if (rList == null) {
+                log.info("rList : null");
                 rList = new ArrayList<OrderDTO>();
-                model.addAttribute("rList", rList);
             }
+            model.addAttribute("rList", rList);
         } catch (Exception e) {
             System.out.println("오류로 인해 주문을 불러올 수 없습니다.");
             log.info(e.toString());
@@ -182,7 +183,7 @@ public class OrderController {
             log.info(e.toString());
             e.printStackTrace();
         }finally {
-            url = "/business/bnsMain.do";
+            url = "/order/bnsSelectAllOrder.do";
             model.addAttribute("msg", msg);
             model.addAttribute("url", url);
 
