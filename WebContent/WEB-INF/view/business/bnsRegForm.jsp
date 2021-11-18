@@ -29,13 +29,13 @@
                 alert("아이디를 입력하세요");
                 f.bns_id.focus();
                 return false;
-            }if(f.bns_name.value==""){
-                alert("세탁소 이름을 입력하세요");
-                f.bns_name.focus();
-                return false;
             }if(f.bns_code.value==""){
                 alert("사업자번호를 입력하세요");
                 f.bns_code.focus();
+                return false;
+            }if(f.bns_name.value==""){
+                alert("세탁소 이름을 입력하세요");
+                f.bns_name.focus();
                 return false;
             }if(f.bns_addr.value==""){
                 alert("주소를 입력하세요");

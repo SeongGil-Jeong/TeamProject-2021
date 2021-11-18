@@ -186,4 +186,17 @@ public class UserController {
             return "/redirect";
         }
     }
+
+    @RequestMapping(value = "user/userLogout") // 로그아웃
+    public String userLogout(HttpServletRequest request, ModelMap model) {
+        log.info(this.getClass().getName() + ".user/userLogout start");
+        HttpSession session = request.getSession();
+
+        String url = "/index.do";
+        String msg = "로그아웃 성공";
+        session.invalidate(); // session clear
+        model.addAttribute("msg", msg);
+        model.addAttribute("url", url);
+        return "/redirect";
+    }
 }
