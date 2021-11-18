@@ -1,5 +1,6 @@
 package poly.service.impl;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import poly.dto.BusinessDTO;
 import poly.dto.OrderDTO;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Service("OrderService")
 public class OrderService implements IOrderService {
+    Logger log = Logger.getLogger(this.getClass());
     @Resource(name = "OrderMapper")
     private IOrderMapper orderMapper;
 
@@ -33,5 +35,25 @@ public class OrderService implements IOrderService {
     @Override // 사용자 주문 확인 / 주문 삭제 / ORDER_STATUS = 3 AND ORDER_SEQ = #{order_seq}
     public int deleteOrder(OrderDTO pDTO) throws Exception {
         return orderMapper.deleteOrder(pDTO);
+    }
+    @Override
+    public int deleteOrder(OrderDTO pDTO, String orderSeqList) throws Exception {
+        int res = 0;
+        String[] orderSeqListArr = orderSeqList.split(",");
+        log.info("orderSeqListArr[0] : " + orderSeqListArr[0]);
+        for (int i = 0; i < orderSeqListArr.length; i++) {
+            if (orderSeqListArr[i] == null) { // null 값일경우 0으로 변경 seq는 1부터 시작하기 때문에 데이터가 지워지지 않음
+                orderSeqListArr[i] = "0";
+            }
+            pDTO.setOrder_seq(orderSeqListArr[i]);
+
+            res += orderMapper.deleteOrder(pDTO);
+            log.info("orderSeqListArr[" + i + "] res : " + (res-1) + " ( i == res => ok )"); // res값과 i값이 같으면 계속 1씩 증가됐다는 의미
+        }
+        res -= orderSeqListArr.length;
+        pDTO = null;
+
+
+        return res;
     }
 }

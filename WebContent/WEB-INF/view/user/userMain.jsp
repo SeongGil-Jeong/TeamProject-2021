@@ -34,6 +34,8 @@
             }
         }
     }
+    // 주문 확인 시 OrderSEQ를 받아서 a,b,c 로 저장 후 split하여 반복해서 값 지우기
+    String deleteOrderSEQ = "";
 %>
 <html lang="en">
 
@@ -57,26 +59,48 @@
     <link href="/resources/css/sb-admin-2.min.css" rel="stylesheet">
 
     <script type="text/javascript">
+        var orderList = [];
         function doOnload(){
-            var user_id = "<%=SS_USER_ID%>";
+            user_id = "<%=SS_USER_ID%>";
             if (user_id.toString().length < 1){
                 alert("로그인된 사용자만 접근 가능합니다.");
                 top.location.href="/index.do";
             }
         }
 
-        function deleteOrder(status, order_seq){
 
-            if (status != 3){ // 세탁 완료 상태가 아닌 주문중, 세탁 중일경우 변경 불가능
-                alert("세탁 완료 상태가 아닙니다.");
+        function setOrderClassName(order_seq) {
+            if (orderList.includes(order_seq)) {
+                var index = orderList.indexOf(order_seq);
+                orderList.splice(index, 1);
+                document.getElementById("orderCheck2" + order_seq).className = "btn btn-danger btn-circle btn-sm";
+                document.getElementById('orderCheck'+order_seq).className = "fas fa-trash";
+            //    이미 체크 했으면 원래 상태로 복구해주고 List에서 값 제거
 
-            }else {
-                var user_seq = "<%=SS_USER_SEQ%>";
-                top.location.href = "/order/deleteOrder.do?user_seq=" + user_seq + "&order_seq=" + order_seq;
+            }else{
+                orderList.push(order_seq);
+                console.log(orderList);
+                document.getElementById("orderCheck2" + order_seq).className = "btn btn-success btn-circle btn-sm";
+                document.getElementById('orderCheck' + order_seq).className = "fas fa-check";
+            //    체크 상태를 바꿔주고 List에 seq추가
             }
+        }
+        function clearOrderName(){ // cancel 클릭 시 orderList 삭제 후 return
+            for(i = 0; i < orderList.length; i++){
+                document.getElementById("orderCheck2" + orderList[i]).className = "btn btn-danger btn-circle btn-sm";
+                document.getElementById("orderCheck" + orderList[i]).className = "fas fa-trash";
+            }
+            orderList = [];
 
         }
-        // 주문 삭제 함수 추가 (세탁 완료 시 주문 삭제)
+
+        function deleteOrder(){
+            user_seq = <%=SS_USER_SEQ%>;
+            order_seqList = orderList.join(); // 문자열로 변경하여 넘겨주기
+
+                top.location.href = "/order/deleteOrder.do?user_seq=" + user_seq + "&order_seqList=" + order_seqList;
+        }
+        // 주문 삭제 함수
     </script>
 
 </head>
@@ -389,7 +413,7 @@
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small"><%=SS_USER_NAME%></span>
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small"><%=SS_USER_NAME%> 님</span>
                             <img class="img-profile rounded-circle"
                                  src="/resources/img/undraw_profile.svg">
                         </a>
@@ -434,7 +458,7 @@
                 <!-- Content Row -->
                 <div class="row">
 
-                    <!-- Earnings (Monthly) Card Example -->
+                    <!-- Earnings (Monthly) Card Example-->
                     <div class="col-xl-3 col-md-6 mb-4">
                         <div class="card border-left-danger shadow h-100 py-2">
                             <div class="card-body">
@@ -480,9 +504,19 @@
                                             완료된 주문</div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800"><%=cnt_st3%></div>
                                     </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                                    </div>
+                                    <%
+                                        if(cnt_st3 > 0){ // 완료된 주문이 있다면
+                                    %>
+<%--                                    <a href="#" data-toggle="modal" data-tartget="#deleteOrder" class="btn btn-success btn-circle"><i class="fas fa-check"></i></a>--%>
+                                    <a class="btn btn-success btn-circle" href="#" data-toggle="modal" data-target="#deleteOrder"><i class="fas fa-check"></i></a>
+
+                                    <%
+                                        }else{
+                                    %>
+                                    <div class="col-auto"><i class="fas fa-clipboard-list fa-2x text-gray-300"></i></div>
+                                    <%
+                                        }
+                                    %>
                                 </div>
                             </div>
                         </div>
@@ -502,6 +536,47 @@
                                         <i class="fas fa-comments fa-2x text-gray-300"></i>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--완료된 주문 지우기 modal-->
+                <div class="modal fade" id="deleteOrder" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">완료된 주문을 선택해 주세요</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <% for (int i = 0; i < rList.size(); i++) {
+                                    OrderDTO rDTO = rList.get(i);
+                                    if (rDTO.getOrder_status().equals("3")) {
+
+
+                                %>
+<%--                                tttt--%>
+                                <div>
+                                    주문번호 : <%=rDTO.getOrder_seq()%>
+                                    <a onclick="setOrderClassName('<%=rDTO.getOrder_seq()%>')" class="btn btn-danger btn-circle btn-sm" style="float: right"
+                                       id="orderCheck2<%=rDTO.getOrder_seq()%>">
+                                        <i class="fas fa-trash" id="orderCheck<%=rDTO.getOrder_seq()%>">
+                                        </i></a>
+                                </div>
+                                <hr>
+                                <%
+                                        }
+                                    }
+                                %>
+                                ※ 확정 시 취소하실 수 없습니다.
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary" type="button" data-dismiss="modal" onclick="clearOrderName()">Cancel</button>
+                                <a class="btn btn-primary" onclick="deleteOrder()">확정</a>
                             </div>
                         </div>
                     </div>
@@ -790,7 +865,7 @@
 <script src="/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 <!-- Core plugin JavaScript-->
-<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="/resources/vendor/jquery-easing/jquery.easing.min.js"></script>
 
 <!-- Custom scripts for all pages-->
 <script src="/resources/js/sb-admin-2.min.js"></script>

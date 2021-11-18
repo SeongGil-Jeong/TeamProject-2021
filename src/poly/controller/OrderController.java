@@ -126,24 +126,22 @@ public class OrderController {
         try {
             String SS_USER_SEQ = CmmUtil.nvl((String) session.getAttribute("SS_USER_SEQ")); // 다른 사용자 접근 방지
             log.info("SS_USER_SEQ : " + SS_USER_SEQ);
-
-            String order_seq = CmmUtil.nvl(request.getParameter("order_seq"));
-            log.info("order_seq : " + order_seq);
-
+            String order_seqList = CmmUtil.nvl((String) request.getParameter("order_seqList")); // 문자열 받아오기
+            log.info("order_seqList : " + order_seqList);
             OrderDTO pDTO = new OrderDTO();
-
-            pDTO.setOrder_seq(order_seq);
             pDTO.setUser_seq(SS_USER_SEQ);
 
-            int res = orderService.deleteOrder(pDTO);
+            int res = orderService.deleteOrder(pDTO, order_seqList); // Override 사용
 
-            if (res == 1) {
-                msg = "주문 확인 성공";
-                url = "/user/userMain.do";
-            } else {
-                msg = "주문 확인 실패";
-                url = "/user/userMain.do";
-            }
+                if (res == 1) {
+                    msg = "주문 확인 성공";
+                    url = "/user/userMain.do";
+                } else {
+                    msg = "주문 확인 실패";
+                    url = "/user/userMain.do";
+                }
+
+            pDTO = null;
         } catch (Exception e) {
             msg = "실패하였습니다 :" + e.toString();
             System.out.println("오류로 인해 주문 확인을 실행할 수 없습니다");
@@ -151,6 +149,7 @@ public class OrderController {
             e.printStackTrace();
 
         }finally {
+            log.info(this.getClass().getName() + ".order/deleteOrder end!");
             model.addAttribute("msg", msg);
             model.addAttribute("url", url);
             return "/redirect";
@@ -186,6 +185,8 @@ public class OrderController {
             url = "/order/bnsSelectAllOrder.do";
             model.addAttribute("msg", msg);
             model.addAttribute("url", url);
+
+            log.info(this.getClass().getName() + ".business/updateStatus end!");
 
             return "/redirect";
 
