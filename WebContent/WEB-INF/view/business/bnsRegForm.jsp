@@ -50,7 +50,7 @@
                 f.bns_password2.focus();
                 return false;
             }
-            if (f.bns_password != f.bns_password2) {
+            if (f.bns_password.value != f.bns_password2.value) {
                 alert("비밀번호가 일치하지 않습니다");
                 f.bns_password.focus();
                 return false;
@@ -100,12 +100,10 @@
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <input type="password" class="form-control form-control-user"
-                                           id="exampleInputPassword" placeholder="Password" name="bns_password">
+                                    <input type="password" class="form-control form-control-user" placeholder="Password" name="bns_password">
                                 </div>
                                 <div class="col-sm-6">
-                                    <input type="password" class="form-control form-control-user"
-                                           id="exampleRepeatPassword" placeholder="Repeat Password" name="bns_password2">
+                                    <input type="password" class="form-control form-control-user" placeholder="Repeat Password" name="bns_password2">
                                 </div>
                             </div>
                             <input type="submit" class="btn btn-primary btn-user btn-block" value="Register Account">
