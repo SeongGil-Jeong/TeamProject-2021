@@ -1,7 +1,7 @@
 # TeamProject-2021
 
 ## DB
-![DB](https://user-images.githubusercontent.com/63443366/142588968-36ca7872-0e60-4740-9e26-67f7f0cd5274.png)
+![image](https://user-images.githubusercontent.com/63443366/142590579-e8d69620-48a1-4268-babc-5251102f2473.png)
 
 ---
 
