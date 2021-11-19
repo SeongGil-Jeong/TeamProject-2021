@@ -186,7 +186,7 @@
             Addons
         </div>
 
-        <!-- Nav Item - Pages Collapse Menu -->
+        <!-- Nav Item - Pages Collapse Menu / Page 이동 메뉴 href 수정 필요 -->
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                aria-expanded="true" aria-controls="collapsePages">
@@ -216,7 +216,7 @@
 
         <!-- Nav Item - Tables -->
         <li class="nav-item">
-            <a class="nav-link" href="tables.html">
+            <a class="nav-link" href="/user/washingInfo.do">
                 <i class="fas fa-fw fa-table"></i>
                 <span>Tables</span></a>
         </li>
@@ -602,36 +602,38 @@
                                 <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
                             </div>
                             <div class="card-body">
-                                <h4 class="small font-weight-bold">Server Migration <span
-                                        class="float-right">20%</span></h4>
+                                <% for (int i = 0; i < rList.size(); i++) {
+                                    OrderDTO rDTO = rList.get(i);
+                                    String status = "";
+                                    String status_name = "";
+                                    String status_color = "";
+                                    if (rDTO == null) {
+                                        rDTO = new OrderDTO();
+                                    }else if (rDTO.getOrder_status().equals("1")) {
+                                        status = "20";
+                                        status_name = "준비중";
+                                        status_color = "progress-bar bg-danger";
+                                    } else if (rDTO.getOrder_status().equals("2")) {
+                                        status = "60";
+                                        status_name = "세탁중";
+                                        status_color = "progress-bar";
+                                    } else if (rDTO.getOrder_status().equals("3")) { // 완료된 주문은 표시하지 않음 / tables에서만 표시
+                                        status = "100";
+                                        status_name = "세탁 완료";
+                                        status_color = "progress-bar bg-success";
+                                    } else {
+                                        status = "0";
+                                    }
+                                %>
+                                <h4 class="small font-weight-bold">ORDER_NUMBER : <%=rDTO.getOrder_seq()%><span
+                                        class="float-right"><%=status_name%> <%=status%>%</span></h4>
                                 <div class="progress mb-4">
-                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 20%"
-                                         aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="<%=status_color%>" role="progressbar" style="width: <%=status%>%"
+                                         aria-valuenow="<%=status%>" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
-                                <h4 class="small font-weight-bold">Sales Tracking <span
-                                        class="float-right">40%</span></h4>
-                                <div class="progress mb-4">
-                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 40%"
-                                         aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <h4 class="small font-weight-bold">Customer Database <span
-                                        class="float-right">60%</span></h4>
-                                <div class="progress mb-4">
-                                    <div class="progress-bar" role="progressbar" style="width: 60%"
-                                         aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <h4 class="small font-weight-bold">Payout Details <span
-                                        class="float-right">80%</span></h4>
-                                <div class="progress mb-4">
-                                    <div class="progress-bar bg-info" role="progressbar" style="width: 80%"
-                                         aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <h4 class="small font-weight-bold">Account Setup <span
-                                        class="float-right">Complete!</span></h4>
-                                <div class="progress">
-                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
-                                         aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
+                                <%
+                                    }
+                                %>
                             </div>
                         </div>
 

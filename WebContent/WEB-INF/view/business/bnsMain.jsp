@@ -596,7 +596,7 @@
                                         status = "60";
                                         status_name = "세탁중";
                                         status_color = "progress-bar";
-                                    } else if (rDTO.getOrder_status().equals("3")) {
+                                    } else if (rDTO.getOrder_status().equals("3")) { // 완료된 주문은 표시하지 않음 / tables에서만 표시
 //                                        status = "100";
 //                                        status_name = "세탁 완료";
 //                                        status_color = "progress-bar bg-success";
@@ -605,7 +605,7 @@
                                         status = "0";
                                     }
                                 %>
-                                <h4 class="small font-weight-bold"><%=rDTO.getOrder_seq()%> <span
+                                <h4 class="small font-weight-bold">ORDER_NUMBER : <%=rDTO.getOrder_seq()%><span
                                         class="float-right"><%=status_name%> <%=status%>%</span></h4>
                                 <div class="progress mb-4">
                                     <div class="<%=status_color%>" role="progressbar" style="width: <%=status%>%"

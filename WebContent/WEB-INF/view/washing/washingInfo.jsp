@@ -1,16 +1,4 @@
-<%@ page import="java.util.List" %>
-<%@ page import="poly.dto.OrderDTO" %>
-<%@ page import="poly.util.CmmUtil" %>
-<%@ page import="org.aspectj.weaver.ast.Or" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%
-    List<OrderDTO> rList = (List<OrderDTO>) request.getAttribute("rList");
-    if (rList == null) {
-        rList = new ArrayList<OrderDTO>();
-    }
-    String SS_BNS_ID = CmmUtil.nvl((String) session.getAttribute("SS_BNS_ID"));
-%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,38 +10,16 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Tables</title>
+    <title>SB Admin 2 - Blank</title>
 
-    <!-- Custom fonts for this template -->
+    <!-- Custom fonts for this template-->
     <link href="/resources/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
             href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
             rel="stylesheet">
 
-    <!-- Custom styles for this template -->
+    <!-- Custom styles for this template-->
     <link href="/resources/css/sb-admin-2.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this page -->
-    <link href="/resources/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-    <script type="text/javascript">
-        function doOnload(){
-            var bns_id = "<%=SS_BNS_ID%>";
-            if (bns_id.toString().length < 1){
-                alert("로그인된 사업자만 접근 가능합니다.");
-                top.location.href="/index.do";
-            }
-        }
-
-        function checkUpdate(status, seq){ // 상태가 세탁 완료 (3) 일 경우 상태 변경 금지
-            if (status >= 3){
-                alert("이미 세탁이 완료되었습니다!");
-            }else{
-                location.href = "/order/updateStatus.do?order_seq=" + seq;
-            }
-
-        }
-
-    </script>
 
 </head>
 
@@ -66,7 +32,7 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/business/bnsMain.do">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/user/userMain.do">
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
@@ -78,7 +44,7 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item">
-            <a class="nav-link" href="/business/bnsMain.do">
+            <a class="nav-link" href="/user/userMain.do">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Dashboard</span></a>
         </li>
@@ -141,14 +107,16 @@
                 <i class="fas fa-fw fa-folder"></i>
                 <span>Pages</span>
             </a>
+<%--            collapse show = 창 펴기--%>
             <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Login Screens:</h6>
-                    <a class="collapse-item" href="login.html">Login</a>
+                    <a class="collapse-item" href="/user/userLogout.do">Login</a>
                     <a class="collapse-item" href="register.html">Register</a>
                     <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
                     <div class="collapse-divider"></div>
                     <h6 class="collapse-header">Other Pages:</h6>
+<%--                    collapse-item active = 포커스 잡기--%>
                     <a class="collapse-item" href="404.html">404 Page</a>
                     <a class="collapse-item" href="blank.html">Blank Page</a>
                 </div>
@@ -164,7 +132,7 @@
 
         <!-- Nav Item - Tables -->
         <li class="nav-item active">
-            <a class="nav-link" href="tables.html">
+            <a class="nav-link" href="/user/washingInfo.do">
                 <i class="fas fa-fw fa-table"></i>
                 <span>Tables</span></a>
         </li>
@@ -190,11 +158,9 @@
             <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
                 <!-- Sidebar Toggle (Topbar) -->
-                <form class="form-inline">
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
-                </form>
+                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <i class="fa fa-bars"></i>
+                </button>
 
                 <!-- Topbar Search -->
                 <form
@@ -396,70 +362,7 @@
             <div class="container-fluid">
 
                 <!-- Page Heading -->
-                <h1 class="h3 mb-2 text-gray-800">Tables</h1>
-                <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
-                    For more information about DataTables, please visit the <a target="_blank"
-                                                                               href="https://datatables.net">official DataTables documentation</a>.</p>
-
-                <!-- DataTales Example -->
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <thead>
-                                <tr>
-                                    <th>Order_seq</th>
-                                    <th>Clothes_cnt</th>
-                                    <th>Clothes_contents</th>
-                                    <th>Order_DT</th>
-                                    <th>Status</th>
-                                    <th>Ch Status</th>
-                                </tr>
-                                </thead>
-                                <tfoot>
-                                <tr>
-                                    <th>Order_seq</th>
-                                    <th>Clothes_cnt</th>
-                                    <th>Clothes_contents</th>
-                                    <th>Order_DT</th>
-                                    <th>Status</th>
-                                    <th>Ch Status</th>
-                                </tr>
-                                </tfoot>
-                                <tbody>
-                                <%
-                                    for (int i = 0; i < rList.size(); i++) { // 주문 상태 int 문자열로 바꾸기
-                                        OrderDTO rDTO = rList.get(i);
-                                        String status = "";
-                                        if (rDTO == null) {
-                                            rDTO = new OrderDTO();
-                                        } else if(rDTO.getOrder_status().equals("1")){
-                                            status = "준비중";
-                                        }else if(rDTO.getOrder_status().equals("2")){
-                                            status = "세탁중";
-                                        } else if (rDTO.getOrder_status().equals("3")) {
-                                            status = "세탁완료";
-                                        }
-                                %>
-                                <tr>
-                                    <td><%=rDTO.getOrder_seq()%></td>
-                                    <td><%=rDTO.getClothes_cnt()%></td>
-                                    <td><%=rDTO.getClothes_contents()%></td>
-                                    <td><%=rDTO.getOrder_dt().substring(0, 10)%></td>
-                                    <td><%=status%></td>
-                                    <td><a href="javascript:checkUpdate('<%=rDTO.getOrder_status()%>','<%=rDTO.getOrder_seq()%>')">상태변경</a></td>
-                                </tr>
-                                <%
-                                    }
-                                %>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+                <h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
 
             </div>
             <!-- /.container-fluid -->
@@ -517,13 +420,6 @@
 
 <!-- Custom scripts for all pages-->
 <script src="/resources/js/sb-admin-2.min.js"></script>
-
-<!-- Page level plugins -->
-<script src="/resources/vendor/datatables/jquery.dataTables.min.js"></script>
-<script src="/resources/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
-<!-- Page level custom scripts -->
-<script src="/resources/js/demo/datatables-demo.js"></script>
 
 </body>
 

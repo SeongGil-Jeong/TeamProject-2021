@@ -43,6 +43,12 @@ public class UserController {
         return "/user/userRegForm";
     }
 
+    @RequestMapping(value = "user/washingInfo")
+    public String washingInfo(ModelMap model) throws Exception {
+        log.info(this.getClass().getName() + ".user/washingInfo ok!");
+        return "/washing/washingInfo";
+    }
+
     @RequestMapping(value = "user/userMain") // 사용자 main page 이동
     public String userMain(HttpServletRequest request, HttpSession session, ModelMap model) throws Exception {
         log.info(this.getClass().getName() + ".user/userMain ok!");
