@@ -59,30 +59,30 @@
     <link href="/resources/css/sb-admin-2.min.css" rel="stylesheet">
 
     <script type="text/javascript">
-        var orderList = [];
-        function doOnload(){
-            user_id = "<%=SS_USER_ID%>";
-            if (user_id.toString().length < 1){
+
+        function doOnload() {
+            var user_id = "<%=SS_USER_ID%>";
+            if (user_id.toString().length < 1) {
                 alert("로그인된 사용자만 접근 가능합니다.");
-                top.location.href="/index.do";
+                top.location.href = "/index.do";
             }
         }
 
-
+        var orderList = [];
         function setOrderClassName(order_seq) {
             if (orderList.includes(order_seq)) {
                 var index = orderList.indexOf(order_seq);
                 orderList.splice(index, 1);
                 document.getElementById("orderCheck2" + order_seq).className = "btn btn-danger btn-circle btn-sm";
                 document.getElementById('orderCheck'+order_seq).className = "fas fa-trash";
-            //    이미 체크 했으면 원래 상태로 복구해주고 List에서 값 제거
+                //    이미 체크 했으면 원래 상태로 복구해주고 List에서 값 제거
 
             }else{
                 orderList.push(order_seq);
                 console.log(orderList);
                 document.getElementById("orderCheck2" + order_seq).className = "btn btn-success btn-circle btn-sm";
                 document.getElementById('orderCheck' + order_seq).className = "fas fa-check";
-            //    체크 상태를 바꿔주고 List에 seq추가
+                //    체크 상태를 바꿔주고 List에 seq추가
             }
         }
         function clearOrderName(){ // cancel 클릭 시 orderList 삭제 후 return
@@ -95,10 +95,10 @@
         }
 
         function deleteOrder(){
-            user_seq = <%=SS_USER_SEQ%>;
+            user_seq = '<%=SS_USER_SEQ%>';
             order_seqList = orderList.join(); // 문자열로 변경하여 넘겨주기
 
-                top.location.href = "/order/deleteOrder.do?user_seq=" + user_seq + "&order_seqList=" + order_seqList;
+            top.location.href = "/order/deleteOrder.do?user_seq=" + user_seq + "&order_seqList=" + order_seqList;
         }
         // 주문 삭제 함수
     </script>
@@ -548,7 +548,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel">완료된 주문을 선택해 주세요</h5>
-                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close" onclick="clearOrderName()">
                                     <span aria-hidden="true">×</span>
                                 </button>
                             </div>
@@ -559,10 +559,9 @@
 
 
                                 %>
-<%--                                tttt--%>
                                 <div>
                                     주문번호 : <%=rDTO.getOrder_seq()%>
-                                    <a onclick="setOrderClassName('<%=rDTO.getOrder_seq()%>')" class="btn btn-danger btn-circle btn-sm" style="float: right"
+                                    <a onclick="setOrderClassName('<%=rDTO.getOrder_seq()%>');" class="btn btn-danger btn-circle btn-sm" style="float: right"
                                        id="orderCheck2<%=rDTO.getOrder_seq()%>">
                                         <i class="fas fa-trash" id="orderCheck<%=rDTO.getOrder_seq()%>">
                                         </i></a>
@@ -576,7 +575,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button class="btn btn-secondary" type="button" data-dismiss="modal" onclick="clearOrderName()">Cancel</button>
-                                <a class="btn btn-primary" onclick="deleteOrder()">확정</a>
+                                <a class="btn btn-primary" onclick="deleteOrder();">확정</a>
                             </div>
                         </div>
                     </div>
