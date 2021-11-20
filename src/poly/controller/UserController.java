@@ -32,6 +32,13 @@ public class UserController {
 
     private Logger log = Logger.getLogger(this.getClass());
 
+    @RequestMapping(value = "user/labelInfo")
+    public String labelInfo(HttpServletRequest request, ModelMap model) throws Exception {
+        log.info(this.getClass().getName() + ".user/labelInfo ok!");
+
+        return "/washing/labelInfo";
+    }
+
     @RequestMapping(value = "user/userRegForm") // 유저 회원가입 창 이동
     public String userRegForm(ModelMap model) throws Exception {
         log.info(this.getClass().getName() + ".user/userRegForm ok!");
