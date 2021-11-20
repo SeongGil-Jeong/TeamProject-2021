@@ -91,6 +91,9 @@ public class UserController {
             String user_password = CmmUtil.nvl(request.getParameter("user_password"));//비밀번호
             String email = CmmUtil.nvl(request.getParameter("email"));//이메일
             String like_branch = CmmUtil.nvl(request.getParameter("like_branch"));
+            if (like_branch.equals("선택없음")) { // 선택없음 선택 시 null 값 처리
+                like_branch = null;
+            }
             String user_addr = CmmUtil.nvl(request.getParameter("user_addr"));//주소
             String user_addr2 = CmmUtil.nvl(request.getParameter("user_addr2"));//상세주소
 
@@ -99,18 +102,18 @@ public class UserController {
             log.info("user_nic : " + user_nic);
             log.info("password : " + user_password);
             log.info("email : " + email);
-            log.info("like_branch : " + like_branch);
             log.info("addr : " + user_addr);
             log.info("addr2 : " + user_addr2);
+            log.info("like_branch : " + like_branch);
 
             pDTO = new UserDTO();
 
             pDTO.setUser_id(user_id);
             pDTO.setUser_name(user_name);
             pDTO.setUser_nic(user_nic);
-
             pDTO.setUser_password(EncryptUtil.encHashSHA256(user_password));
             pDTO.setEmail(EncryptUtil.encAES128CBC(email));
+            pDTO.setLike_branch(like_branch);
 
             pDTO.setUser_addr(user_addr);
             pDTO.setUser_addr2(user_addr2);
