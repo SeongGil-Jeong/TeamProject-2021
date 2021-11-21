@@ -110,7 +110,35 @@
             top.location.href = "/order/deleteOrder.do?user_seq=" + user_seq + "&order_seqList=" + order_seqList;
         }
 
+
         // clothes 관련 함수
+        var clothesInfoList = []; // submit 전 옷 세탁 정보를 저장
+        function setClothesInfo(clothesInfo){ // 옷 세탁 정보 변경
+            if (clothesInfoList.includes(clothesInfo)) { // 값 제거
+
+                var clothesIndex = clothesInfoList.indexOf(clothesInfo);
+                clothesInfoList.splice(clothesIndex, 1);
+                document.getElementById("clothes_info").value = clothesInfoList;
+
+            }else{
+                clothesInfoList.push(clothesInfo);
+                document.getElementById("clothes_info").value = clothesInfoList;
+            }
+        }
+
+        function clearClothesInfo() { //  등록된 옷 정보 초기화
+            document.getElementById("clothes_info").value = "";
+            clothesInfoList = [];
+        }
+
+        function insertClothes() { // 옷 추가 실행
+            user_seq = '<%=SS_USER_SEQ%>';
+            clothes_name = document.getElementById("clothes_name").value;
+            clothes_type = document.getElementById("clothes_type").value;
+            clothesInfo_list = clothesInfoList.join();
+            top.location.href = "/clothes/insertClothes.do?user_seq=" + user_seq + "&clothes_name=" + clothes_name + "&clothes_type=" + clothes_type +
+                "&clothesInfo_list=" + clothesInfo_list;
+        }
 
 
     </script>
@@ -530,6 +558,7 @@
                             <!-- Card Header -->
                             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                 <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
+                                <a class="m-0 font-weight-bold text-primary" href="#" data-toggle="modal" data-target="#insertClothes">옷 추가</a>
                             </div>
                             <!-- Card Body -->
                             <div class="card-body">
@@ -549,6 +578,41 @@
                                     %>
 
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 옷 등록 modal -->
+                    <div class="modal fade" id="insertClothes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">옷 추가하기</h5>
+                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close" onclick="clearClothesInfo()">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                    <div class="modal-body">
+                                        <div>
+                                            <input type="text" name="clothes_name" id="clothes_name" placeholder="옷 이름">
+                                        </div>
+                                        <div>
+                                            <input type="text" name="clothes_type" id="clothes_type" placeholder="옷 type">
+                                        </div>
+                                        <div>
+                                            <input type="button" onclick="setClothesInfo('물세탁')" value="물세탁">
+                                            <input type="button" onclick="setClothesInfo('드라이 금지')" value="드라이 금지">
+                                        </div>
+                                        <div>
+                                            <input type="text" name="clothes_info" id="clothes_info">
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-secondary" type="button" data-dismiss="modal" onclick="clearClothesInfo()">Cancel</button>
+                                        <input type="button" class="btn btn-primary" onclick="insertClothes()" value="등록하기">
+                                    </div>
                             </div>
                         </div>
                     </div>

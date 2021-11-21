@@ -18,7 +18,7 @@ public class ClothesService implements IClothesService {
     private IClothesMapper clothesMapper;
 
     @Override
-    public int insertClothes(ClothesDTO pDTO, String clothesInfo) throws Exception {
+    public int insertClothes(ClothesDTO pDTO) throws Exception {
         return clothesMapper.insertClothes(pDTO);
     }
 
