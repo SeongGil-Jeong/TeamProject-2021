@@ -5,9 +5,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import poly.dto.BusinessDTO;
+import poly.dto.ClothesDTO;
 import poly.dto.OrderDTO;
 import poly.dto.UserDTO;
 import poly.service.IBusinessService;
+import poly.service.IClothesService;
 import poly.service.IOrderService;
 import poly.service.IUserService;
 import poly.util.CmmUtil;
@@ -29,6 +31,9 @@ public class UserController {
 
     @Resource(name = "OrderService")
     private IOrderService orderService;
+
+    @Resource(name = "ClothesService")
+    private IClothesService clothesService;
 
     private Logger log = Logger.getLogger(this.getClass());
 
@@ -60,19 +65,38 @@ public class UserController {
     public String userMain(HttpServletRequest request, HttpSession session, ModelMap model) throws Exception {
         log.info(this.getClass().getName() + ".user/userMain ok!");
         String SS_USER_SEQ = CmmUtil.nvl((String) session.getAttribute("SS_USER_SEQ"));
-        String msg = "";
+
+        log.info("SS_USER_SEQ : " + SS_USER_SEQ);
+
+        String orderMsg = ""; // 주문 조회 후 Msg
+        String clothesMsg = ""; //  옷장 조회 후  Msg
+
         UserDTO pDTO = new UserDTO();
+
         pDTO.setUser_seq(SS_USER_SEQ);
-        List<OrderDTO> rList = orderService.userSelectOrder(pDTO);
+        List<OrderDTO> rList = orderService.userSelectOrder(pDTO); // 주문 정보 조회
+        // 넘어온 주문 정보
         if (rList == null) {
             rList = new ArrayList<OrderDTO>();
-            msg = "주문이 없습니다";
+            orderMsg = "주문이 없습니다";
         } else {
-            msg = rList.size() + "개의 주문이 있습니다";
+            orderMsg = rList.size() + "개의 주문이 있습니다";
         }
-
+        List<ClothesDTO> clothesRList = clothesService.selectClothesList(pDTO); // 옷 정보 조회
+         // 넘어온 옷 정보
+        if (clothesRList == null) {
+            clothesRList = new ArrayList<ClothesDTO>();
+            clothesMsg = "옷이 없습니다";
+        } else {
+            clothesMsg = clothesRList.size() + "개의 옷이 있습니다";
+        }
+         // 주문 정보 넘겨주기
         model.addAttribute("rList", rList);
-        model.addAttribute("msg", msg);
+        model.addAttribute("orderMsg", orderMsg);
+
+        // 옷 정보 넘겨주기
+        model.addAttribute("clothesRList", clothesRList);
+        model.addAttribute("clothesMsg", clothesMsg);
 
         return "/user/userMain";
     }

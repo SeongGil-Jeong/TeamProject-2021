@@ -2,14 +2,20 @@
 <%@ page import="poly.dto.OrderDTO" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="poly.dto.ClothesDTO" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String SS_USER_ID = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
     String SS_USER_NAME = CmmUtil.nvl((String) session.getAttribute("SS_USER_NAME"));
     String SS_USER_SEQ = CmmUtil.nvl((String) session.getAttribute("SS_USER_SEQ")); // 주문 등 조회 시 사용
+
+    // 주문 조회 시 사용
     List<OrderDTO> rList = (List<OrderDTO>) request.getAttribute("rList");
-    String msg = CmmUtil.nvl((String) request.getAttribute("msg"));
+    String orderMsg = CmmUtil.nvl((String) request.getAttribute("orderMsg"));
+
+    // 옷장 조회 시 사용
+    List<ClothesDTO> clothesRList = (List<ClothesDTO>) request.getAttribute("clothesRList");
 
     if (rList == null) {
         rList = new ArrayList<OrderDTO>();
@@ -71,7 +77,7 @@
                 top.location.href = "/index.do";
             }
         }
-
+        // order 관련 함수
         var orderList = [];
         function setOrderClassName(order_seq) {
             if (orderList.includes(order_seq)) {
@@ -97,14 +103,16 @@
             orderList = [];
 
         }
-
         function deleteOrder(){
             user_seq = '<%=SS_USER_SEQ%>';
             order_seqList = orderList.join(); // 문자열로 변경하여 넘겨주기
 
             top.location.href = "/order/deleteOrder.do?user_seq=" + user_seq + "&order_seqList=" + order_seqList;
         }
-        // 주문 삭제 함수
+
+        // clothes 관련 함수
+
+
     </script>
 
 </head>
@@ -519,29 +527,27 @@
                     <!-- Area Chart -->
                     <div class="col-xl-8 col-lg-7">
                         <div class="card shadow mb-4">
-                            <!-- Card Header - Dropdown -->
-                            <div
-                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <!-- Card Header -->
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                 <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
-                                <div class="dropdown no-arrow">
-                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                         aria-labelledby="dropdownMenuLink">
-                                        <div class="dropdown-header">Dropdown Header:</div>
-                                        <a class="dropdown-item" href="#">Action</a>
-                                        <a class="dropdown-item" href="#">Another action</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#">Something else here</a>
-                                    </div>
-                                </div>
                             </div>
                             <!-- Card Body -->
                             <div class="card-body">
                                 <div class="chart-area">
-                                    <canvas id="myAreaChart"></canvas>
+                                    <% for (int i = 0; i < clothesRList.size(); i++) {
+                                        ClothesDTO rDTO = clothesRList.get(i);
+
+                                        if (rDTO == null) {
+                                            rDTO = new ClothesDTO();
+                                        }
+                                    %>
+                                    <div>
+                                        옷 seq : <%=rDTO.getClothes_seq()%> 옷 이름 : <%=rDTO.getClothes_name()%> 옷 정보 : <%=rDTO.getClothes_info()%>
+                                    </div>
+                                    <%
+                                        }
+                                    %>
+
                                 </div>
                             </div>
                         </div>

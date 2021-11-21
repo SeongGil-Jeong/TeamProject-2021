@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- JAVA와 연결할 Mapper 파일 설정 -->
+
+<mapper namespace="poly.persistance.mapper.IClothesMapper">
+<!--	옷 등록 기능-->
+	<insert id="insertClothes" parameterType="ClothesDTO">
+		INSERT INTO teamPRJ.CLOTHES_INFO
+		(
+			CLOTHES_NAME,
+			CLOTHES_TYPE,
+			CLOTHES_INFO,
+			USER_SEQ
+		) VALUES
+		(
+			#{clothes_name},
+			#{clothes_type},
+			#{clothes_info},
+			#{user_seq}
+		)
+	</insert>
+
+	<select id="selectClothesList" parameterType="UserDTO" resultType="ClothesDTO">
+		SELECT CLOTHES_SEQ, CLOTHES_NAME, CLOTHES_TYPE, CLOTHES_INFO
+
+		FROM teamPRJ.CLOTHES_INFO
+
+		WHERE USER_SEQ = #{user_seq}
+	</select>
+
+
+</mapper>
