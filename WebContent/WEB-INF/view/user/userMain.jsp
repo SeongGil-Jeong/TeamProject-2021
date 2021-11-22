@@ -551,19 +551,28 @@
                 <!-- Content Row -->
 
                 <div class="row">
-
+                    <!-- 옷 정보 리스트-->
                     <!-- Area Chart -->
                     <div class="col-xl-8 col-lg-7">
                         <div class="card shadow mb-4">
                             <!-- Card Header -->
                             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
+                                <h6 class="m-0 font-weight-bold text-primary">나의 옷장</h6>
                                 <a class="m-0 font-weight-bold text-primary" href="#" data-toggle="modal" data-target="#insertClothes">옷 추가</a>
                             </div>
                             <!-- Card Body -->
-                            <div class="card-body">
+                            <div class="card-body" style="overflow: scroll">
                                 <div class="chart-area">
-                                    <% for (int i = 0; i < clothesRList.size(); i++) {
+                                    <% if(clothesRList.size() == 0){%>
+                                    <div>옷이 없습니다.</div>
+                                    <%
+
+                                    %>
+
+                                    <%}else{
+
+
+                                        for (int i = 0; i < clothesRList.size(); i++) {
                                         ClothesDTO rDTO = clothesRList.get(i);
 
                                         if (rDTO == null) {
@@ -572,9 +581,12 @@
                                     %>
                                     <div>
                                         옷 seq : <%=rDTO.getClothes_seq()%> 옷 이름 : <%=rDTO.getClothes_name()%> 옷 정보 : <%=rDTO.getClothes_info()%>
+                                        <a class="btn btn-danger btn-circle" href="/clothes/deleteClothes.do?clothes_seq=<%=rDTO.getClothes_seq()%>">
+                                            <i class="fas fa-trash"></i></a>
+
                                     </div>
                                     <%
-                                        }
+                                        }}
                                     %>
 
                                 </div>

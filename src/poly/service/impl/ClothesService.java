@@ -27,4 +27,9 @@ public class ClothesService implements IClothesService {
         return clothesMapper.selectClothesList(pDTO);
     }
 
+    @Override
+    public int deleteClothes(ClothesDTO pDTO) throws Exception {
+        return clothesMapper.deleteClothes(pDTO);
+    }
+
 }

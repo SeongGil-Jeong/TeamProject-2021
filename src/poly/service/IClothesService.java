@@ -10,4 +10,6 @@ public interface IClothesService {
 
     List<ClothesDTO> selectClothesList(UserDTO pDTO) throws Exception; // 옷 정보 조회하기
 
+    int deleteClothes(ClothesDTO pDTO) throws Exception; // 옷 삭제하기
+
 }

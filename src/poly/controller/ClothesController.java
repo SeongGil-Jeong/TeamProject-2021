@@ -11,6 +11,7 @@ import poly.util.CmmUtil;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class ClothesController {
@@ -50,6 +51,46 @@ public class ClothesController {
         model.addAttribute("url", url);
         model.addAttribute("msg", msg);
 
+        return "/redirect";
+    }
+
+    @RequestMapping(value = "clothes/deleteClothes") // 옷 삭제하기
+    public String deleteClothes(HttpServletRequest request, ModelMap model, HttpSession session) throws Exception {
+        log.info(this.getClass().getName() + ".clothes/deleteClothes start!");
+        String msg = "";
+        String url = "";
+        try {
+            String SS_USER_SEQ = CmmUtil.nvl((String) session.getAttribute("SS_USER_SEQ"));
+            String clothes_seq = CmmUtil.nvl(request.getParameter("clothes_seq"));
+
+            log.info("SS_USER_SEQ : " + SS_USER_SEQ);
+            log.info("clothes_seq : " + clothes_seq);
+
+            ClothesDTO pDTO = new ClothesDTO();
+            pDTO.setUser_seq(SS_USER_SEQ);
+            pDTO.setClothes_seq(clothes_seq);
+
+            int res = clothesService.deleteClothes(pDTO);
+
+            pDTO = null;
+
+            if (res == 1) {
+                msg = "옷 삭제 성공";
+                url = "/user/userMain.do";
+            } else {
+                msg = "옷 삭제 실패";
+                url = "/user/userMain.do";
+            }
+        } catch (Exception e) {
+            msg = "실패하였습니다 :" + e.toString();
+            System.out.println("오류로 인해 옷 등록이 실패하였습니다");
+            log.info(e.toString());
+            e.printStackTrace();
+            url = "/user/userMain.do";
+        }finally {
+            model.addAttribute("url", url);
+            model.addAttribute("msg", msg);
+        }
         return "/redirect";
     }
 }

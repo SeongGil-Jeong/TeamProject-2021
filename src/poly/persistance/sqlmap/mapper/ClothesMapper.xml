@@ -20,6 +20,7 @@
 		)
 	</insert>
 
+<!--	옷장 조회 모든 옷들 조회하기-->
 	<select id="selectClothesList" parameterType="UserDTO" resultType="ClothesDTO">
 		SELECT CLOTHES_SEQ, CLOTHES_NAME, CLOTHES_TYPE, CLOTHES_INFO
 
@@ -27,6 +28,11 @@
 
 		WHERE USER_SEQ = #{user_seq}
 	</select>
+<!--	옷 삭제 -->
+	<delete id="deleteClothes" parameterType="ClothesDTO">
+		DELETE FROM teamPRJ.CLOTHES_INFO
+		WHERE CLOTHES_SEQ = #{clothes_seq} AND USER_SEQ = #{user_seq}
+	</delete>
 
 
 </mapper>
