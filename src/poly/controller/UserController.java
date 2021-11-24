@@ -90,6 +90,15 @@ public class UserController {
         } else {
             clothesMsg = clothesRList.size() + "개의 옷이 있습니다";
         }
+
+        List<BusinessDTO> bList = businessService.selectBnsName(); //세탁소(사업자) 정보 조회
+        // 넘어온 세탁소(사업자) 정보
+        if (bList == null) {
+            bList = new ArrayList<BusinessDTO>();
+            log.info("조회 중 오류");
+        } else {
+            log.info(bList.size()+" 개의 세탁 업소가 조회되었습니다.");
+        }
          // 주문 정보 넘겨주기
         model.addAttribute("rList", rList);
         model.addAttribute("orderMsg", orderMsg);
@@ -97,6 +106,8 @@ public class UserController {
         // 옷 정보 넘겨주기
         model.addAttribute("clothesRList", clothesRList);
         model.addAttribute("clothesMsg", clothesMsg);
+
+        model.addAttribute("businessList", bList);
 
         return "/user/userMain";
     }

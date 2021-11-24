@@ -16,4 +16,6 @@ public interface IOrderService {
     int deleteOrder(OrderDTO pDTO) throws Exception;
 
     int deleteOrder(OrderDTO pDTO, String orderSeqList) throws Exception;
+
+    int insertOrder(OrderDTO pDTO) throws Exception;
 }

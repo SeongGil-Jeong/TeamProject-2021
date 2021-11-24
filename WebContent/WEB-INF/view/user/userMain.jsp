@@ -3,6 +3,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="poly.dto.ClothesDTO" %>
+<%@ page import="poly.dto.BusinessDTO" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
@@ -16,6 +17,9 @@
 
     // 옷장 조회 시 사용
     List<ClothesDTO> clothesRList = (List<ClothesDTO>) request.getAttribute("clothesRList");
+
+    // 주문 조회 시 세탁 업소 선택을 위해 사용
+    List<BusinessDTO> businessList = (List<BusinessDTO>) request.getAttribute("businessList");
 
     if (rList == null) {
         rList = new ArrayList<OrderDTO>();
@@ -108,6 +112,52 @@
             order_seqList = orderList.join(); // 문자열로 변경하여 넘겨주기
 
             top.location.href = "/order/deleteOrder.do?user_seq=" + user_seq + "&order_seqList=" + order_seqList;
+        }
+
+        // #insertOrder 모달창을 위한 함수
+
+        var orderClothesList = [];
+        function setInsertOrderClassName(clothes_seq) {
+            if (orderClothesList.includes(clothes_seq)) {
+                var index = orderClothesList.indexOf(clothes_seq);
+                orderClothesList.splice(index, 1);
+                document.getElementById("insertOrderCheck2" + clothes_seq).className = "btn btn-danger btn-circle btn-sm";
+                document.getElementById('insertOrderCheck'+clothes_seq).className = "fas fa-trash";
+                //    이미 체크 했으면 원래 상태로 복구해주고 List에서 값 제거
+
+            }else{
+                orderClothesList.push(clothes_seq);
+                console.log("orderClothesList : "+orderClothesList);
+                document.getElementById("insertOrderCheck2" + clothes_seq).className = "btn btn-success btn-circle btn-sm";
+                document.getElementById('insertOrderCheck' + clothes_seq).className = "fas fa-check";
+                //    체크 상태를 바꿔주고 List에 seq추가
+            }
+        }
+        function clearInsertOrderName(){ // cancel 클릭 시 orderClothesList 삭제 후 return
+            for(i = 0; i < orderClothesList.length; i++){
+                document.getElementById("insertOrderCheck2" + orderClothesList[i]).className = "btn btn-danger btn-circle btn-sm";
+                document.getElementById("insertOrderCheck" + orderClothesList[i]).className = "fas fa-trash";
+            }
+            orderClothesList = [];
+
+        }
+        function insertOrder(){
+            //세션에서 꺼낸 user_seq
+            user_seq = '<%=SS_USER_SEQ%>';
+            //정수형이므로 문자열로 변환
+            clothes_cnt = orderClothesList.length+"";
+            // 위의 함수를 통해 만든 옷 리스트를 문자열로 변환하여 전송 및 저장
+            clothes_contents = orderClothesList.join();
+            //주문 시작한 직후의 상태는 '준비중' 이므로 status에 1을 담은 채로 전송
+            order_status = "1";
+
+            //select태그로부터 선택된 option의 value값 가져오기 --> 선택된 업소의 seq값을 가져옴
+            var target = document.getElementById("selectBNS");
+            bns_seq = target.options[target.selectedIndex].value;
+
+            //url을 통해 파라미터값과 함께 요청 --> 파라미터 값은 DTO에 들어가게 됌
+            top.location.href = "/order/insertOrder.do?user_seq=" + user_seq + "&clothes_contents=" + clothes_contents
+                +"&clothes_cnt="+ clothes_cnt+"&order_status="+ order_status+"&bns_seq="+bns_seq;
         }
 
 
@@ -362,14 +412,14 @@
                                     </div>
                                 </div>
                                 <div>
-<%--                                    <div class="small text-gray-500">December 12, 2019</div>  알림 시간--%>
+                                    <%--                                    <div class="small text-gray-500">December 12, 2019</div>  알림 시간--%>
                                     <span class="font-weight-bold">주문을 완료해 주세요!</span>
                                 </div>
                             </a>
                             <%
                                 }
                             %>
-<%--                            모든 알람 보기--%>
+                            <%--                            모든 알람 보기--%>
                             <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
                         </div>
                     </li>
@@ -474,11 +524,11 @@
                                     <%
                                         if(cnt_st3 > 0){ // 완료된 주문이 있다면
                                     %>
-<%--                                    <a href="#" data-toggle="modal" data-tartget="#deleteOrder" class="btn btn-success btn-circle"><i class="fas fa-check"></i></a>--%>
+                                    <%--                                    <a href="#" data-toggle="modal" data-tartget="#deleteOrder" class="btn btn-success btn-circle"><i class="fas fa-check"></i></a>--%>
                                     <a class="btn btn-success btn-circle" href="#" data-toggle="modal" data-target="#deleteOrder"><i class="fas fa-check"></i></a>
 
                                     <%
-                                        }else{
+                                    }else{
                                     %>
                                     <div class="col-auto"><i class="fas fa-clipboard-list fa-2x text-gray-300"></i></div>
                                     <%
@@ -559,6 +609,7 @@
                             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                 <h6 class="m-0 font-weight-bold text-primary">나의 옷장</h6>
                                 <a class="m-0 font-weight-bold text-primary" href="#" data-toggle="modal" data-target="#insertClothes">옷 추가</a>
+                                <a class="m-0 font-weight-bold text-primary" href="#" data-toggle="modal" data-target="#insertOrder">주문하기</a>
                             </div>
                             <!-- Card Body -->
                             <div class="card-body" style="overflow: scroll">
@@ -573,11 +624,11 @@
 
 
                                         for (int i = 0; i < clothesRList.size(); i++) {
-                                        ClothesDTO rDTO = clothesRList.get(i);
+                                            ClothesDTO rDTO = clothesRList.get(i);
 
-                                        if (rDTO == null) {
-                                            rDTO = new ClothesDTO();
-                                        }
+                                            if (rDTO == null) {
+                                                rDTO = new ClothesDTO();
+                                            }
                                     %>
                                     <div>
                                         옷 seq : <%=rDTO.getClothes_seq()%> 옷 이름 : <%=rDTO.getClothes_name()%> 옷 정보 : <%=rDTO.getClothes_info()%>
@@ -586,7 +637,7 @@
 
                                     </div>
                                     <%
-                                        }}
+                                            }}
                                     %>
 
                                 </div>
@@ -605,26 +656,86 @@
                                         <span aria-hidden="true">×</span>
                                     </button>
                                 </div>
-                                    <div class="modal-body">
-                                        <div>
-                                            <input type="text" name="clothes_name" id="clothes_name" placeholder="옷 이름">
-                                        </div>
-                                        <div>
-                                            <input type="text" name="clothes_type" id="clothes_type" placeholder="옷 type">
-                                        </div>
-                                        <div>
-                                            <input type="button" onclick="setClothesInfo('물세탁')" value="물세탁">
-                                            <input type="button" onclick="setClothesInfo('드라이 금지')" value="드라이 금지">
-                                        </div>
-                                        <div>
-                                            <input type="text" name="clothes_info" id="clothes_info">
-                                        </div>
+                                <div class="modal-body">
+                                    <div>
+                                        <input type="text" name="clothes_name" id="clothes_name" placeholder="옷 이름">
+                                    </div>
+                                    <div>
+                                        <input type="text" name="clothes_type" id="clothes_type" placeholder="옷 type">
+                                    </div>
+                                    <div>
+                                        <input type="button" onclick="setClothesInfo('물세탁')" value="물세탁">
+                                        <input type="button" onclick="setClothesInfo('드라이 금지')" value="드라이 금지">
+                                    </div>
+                                    <div>
+                                        <input type="text" name="clothes_info" id="clothes_info">
+                                    </div>
 
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-secondary" type="button" data-dismiss="modal" onclick="clearClothesInfo()">Cancel</button>
+                                    <input type="button" class="btn btn-primary" onclick="insertClothes()" value="등록하기">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 주문 등록 모달창 -->
+                    <div class="modal fade" id="insertOrder" tabindex="-1"
+                         role="dialog" aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">주문 맡길 옷들을 선택해
+                                        주세요</h5>
+                                    <button class="close" type="button" data-dismiss="modal"
+                                            aria-label="Close" onclick="clearInsertOrderName()">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <%
+                                        for (ClothesDTO e : clothesRList) {
+                                            String clothes_seq = e.getClothes_seq();
+                                            String clothes_name = e.getClothes_name();
+                                    %>
+                                    <div>
+                                        옷 정보
+                                        <%=clothes_seq%> : <%=clothes_name%>
+                                        <a onclick="setInsertOrderClassName('<%=clothes_name%>');"
+                                           class="btn btn-danger btn-circle btn-sm" style="float: right"
+                                           id="insertOrderCheck2<%=clothes_name%>"> <i
+                                                class="fas fa-trash" id="insertOrderCheck<%=clothes_name%>">
+                                        </i></a>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button class="btn btn-secondary" type="button" data-dismiss="modal" onclick="clearClothesInfo()">Cancel</button>
-                                        <input type="button" class="btn btn-primary" onclick="insertClothes()" value="등록하기">
-                                    </div>
+                                    <hr>
+                                    <%
+
+                                        }
+                                    %>
+                                    희망 세탁 업소 선택 :
+                                    <select id="selectBNS">
+                                        <% for(BusinessDTO e : businessList) {
+                                            String bns_seq = e.getBns_seq();
+                                            String bns_name = e.getBns_name(); %>
+
+                                        <option value="<%=bns_seq%>"> <%="#"+bns_seq+" : "+bns_name %> </option>
+
+                                        <% }%>
+
+                                    </select>
+
+
+
+                                    <br/>
+                                    ※ 확정 시 취소하실 수 없습니다.
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-secondary" type="button"
+                                            data-dismiss="modal" onclick="clearInsertOrderName()">Cancel</button>
+                                    <a class="btn btn-primary" onclick="insertOrder();">주문 확정</a>
+                                </div>
                             </div>
                         </div>
                     </div>

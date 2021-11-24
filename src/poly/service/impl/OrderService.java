@@ -36,7 +36,7 @@ public class OrderService implements IOrderService {
     public int deleteOrder(OrderDTO pDTO) throws Exception {
         return orderMapper.deleteOrder(pDTO);
     }
-    @Override
+    @Override // 세탁이 완료된 주문 삭제
     public int deleteOrder(OrderDTO pDTO, String orderSeqList) throws Exception {
         int res = 0;
         String[] orderSeqListArr = orderSeqList.split(",");
@@ -53,6 +53,19 @@ public class OrderService implements IOrderService {
         res -= orderSeqListArr.length;
         pDTO = null;
 
+
+        return res;
+    }
+
+    @Override // 주문 추가 (사용자가 주문)
+    public int insertOrder(OrderDTO pDTO) throws Exception {
+        log.info(this.getClass().getName()+" insertOrder start !!");
+
+        if(pDTO==null) {
+            pDTO = new OrderDTO();
+        }
+
+        int res = orderMapper.insertOrder(pDTO);
 
         return res;
     }

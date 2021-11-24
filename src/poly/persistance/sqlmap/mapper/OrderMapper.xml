@@ -26,4 +26,24 @@
 		WHERE ORDER_SEQ = #{order_seq} AND USER_SEQ = #{user_seq}
 	</delete>
 
+	<!-- 주문 추가 (사용자) -->
+	<insert id="insertOrder" parameterType="OrderDTO">
+		INSERT INTO teamPRJ.ORDER_INFO
+		(
+			CLOTHES_CNT,
+			CLOTHES_CONTENTS,
+			ORDER_STATUS,
+			USER_SEQ,
+			BNS_SEQ
+		)
+		VALUES (
+		#{clothes_cnt},
+		#{clothes_contents},
+		#{order_status},
+		#{user_seq},
+		#{bns_seq}
+		)
+
+	</insert>
+
 </mapper>

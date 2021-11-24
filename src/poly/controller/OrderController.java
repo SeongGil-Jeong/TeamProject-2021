@@ -194,4 +194,59 @@ public class OrderController {
 
     }
 
+    @RequestMapping(value="order/insertOrder") // 주문 추가하기
+    public String insertOrder(HttpServletRequest request, ModelMap model) throws Exception {
+
+        log.info(this.getClass().getName()+" insertOrder start!");
+
+        String msg="";
+        String url="";
+        OrderDTO pDTO = new OrderDTO();
+
+        try {
+
+            //jsp로부터 값을 넘겨받는 로직
+            String clothes_cnt = CmmUtil.nvl((String)request.getParameter("clothes_cnt"));
+            String clothes_contents = CmmUtil.nvl((String)request.getParameter("clothes_contents"));
+            String order_status = CmmUtil.nvl((String)request.getParameter("order_status"));
+            String bns_seq = CmmUtil.nvl((String)request.getParameter("bns_seq"));
+            String user_seq = CmmUtil.nvl((String)request.getParameter("user_seq"));
+
+            //확인을 위한 로그
+            log.info("clothes_cnt : "+clothes_cnt);
+            log.info("clothes_contents : "+clothes_contents);
+            log.info("order_status : "+order_status);
+            log.info("bns_seq : "+bns_seq);
+            log.info("user_seq : "+user_seq);
+
+            //서비스의 인자값으로 넣을 pDTO에 값 세팅
+            pDTO.setClothes_cnt(clothes_cnt);
+            pDTO.setClothes_contents(clothes_contents);
+            pDTO.setOrder_status(order_status);
+            pDTO.setBns_seq(bns_seq);
+            pDTO.setUser_seq(user_seq);
+
+            int res = orderService.insertOrder(pDTO);
+
+            if(res==1) {
+                msg="주문이 성공적으로 완료되었습니다.";
+            } else {
+                msg="주문에 실패하였습니다.";
+            }
+
+        }catch(Exception e) {
+            msg = "실패하였습니다 :" + e.toString();
+            e.printStackTrace();
+        }finally {
+            url = "/user/userMain.do";
+            model.addAttribute("url", url);
+            model.addAttribute("msg", msg);
+            pDTO=null;
+        }
+
+
+        log.info(this.getClass().getName()+" insertOrder end !");
+        return "/redirect";
+    }
+
 }
