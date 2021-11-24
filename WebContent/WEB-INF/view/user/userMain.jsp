@@ -117,17 +117,18 @@
         // #insertOrder 모달창을 위한 함수
 
         var orderClothesList = [];
-        function setInsertOrderClassName(clothes_seq) {
-            if (orderClothesList.includes(clothes_seq)) {
-                var index = orderClothesList.indexOf(clothes_seq);
+        function setInsertOrderClassName(clothes_seq, clothes_name) {
+            if (orderClothesList.includes(clothes_name)) {
+                console.log("orderClothesList : "+ orderClothesList);
+                var index = orderClothesList.indexOf(clothes_name);
                 orderClothesList.splice(index, 1);
                 document.getElementById("insertOrderCheck2" + clothes_seq).className = "btn btn-danger btn-circle btn-sm";
                 document.getElementById('insertOrderCheck'+clothes_seq).className = "fas fa-trash";
                 //    이미 체크 했으면 원래 상태로 복구해주고 List에서 값 제거
 
             }else{
-                orderClothesList.push(clothes_seq);
-                console.log("orderClothesList : "+orderClothesList);
+                orderClothesList.push(clothes_name);
+                console.log("orderClothesList : "+ orderClothesList);
                 document.getElementById("insertOrderCheck2" + clothes_seq).className = "btn btn-success btn-circle btn-sm";
                 document.getElementById('insertOrderCheck' + clothes_seq).className = "fas fa-check";
                 //    체크 상태를 바꿔주고 List에 seq추가
@@ -703,10 +704,10 @@
                                     <div>
                                         옷 정보
                                         <%=clothes_seq%> : <%=clothes_name%>
-                                        <a onclick="setInsertOrderClassName('<%=clothes_name%>');"
+                                        <a onclick="setInsertOrderClassName('<%=clothes_seq%>', '<%=clothes_name%>');"
                                            class="btn btn-danger btn-circle btn-sm" style="float: right"
-                                           id="insertOrderCheck2<%=clothes_name%>"> <i
-                                                class="fas fa-trash" id="insertOrderCheck<%=clothes_name%>">
+                                           id="insertOrderCheck2<%=clothes_seq%>"> <i
+                                                class="fas fa-trash" id="insertOrderCheck<%=clothes_seq%>">
                                         </i></a>
                                     </div>
                                     <hr>
