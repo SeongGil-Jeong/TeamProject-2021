@@ -610,7 +610,6 @@
                             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                 <h6 class="m-0 font-weight-bold text-primary">나의 옷장</h6>
                                 <a class="m-0 font-weight-bold text-primary" href="#" data-toggle="modal" data-target="#insertClothes">옷 추가</a>
-                                <a class="m-0 font-weight-bold text-primary" href="#" data-toggle="modal" data-target="#insertOrder">주문하기</a>
                             </div>
                             <!-- Card Body -->
                             <div class="card-body" style="overflow: scroll">
@@ -631,17 +630,21 @@
                                                 rDTO = new ClothesDTO();
                                             }
                                     %>
-                                    <div>
-                                        옷 seq : <%=rDTO.getClothes_seq()%> 옷 이름 : <%=rDTO.getClothes_name()%> 옷 정보 : <%=rDTO.getClothes_info()%>
-                                        <a class="btn btn-danger btn-circle" href="/clothes/deleteClothes.do?clothes_seq=<%=rDTO.getClothes_seq()%>">
-                                            <i class="fas fa-trash"></i></a>
+                                    <div style="width: auto; height : auto; border: 3px solid #4e73df;border-radius: 27px 45px 60px 95px;">
 
+                                        <a class="btn btn-danger btn-circle" href="/clothes/deleteClothes.do?clothes_seq=<%=rDTO.getClothes_seq()%>" style="float: right;">
+                                            <i class="fas fa-trash"></i></a>
+                                        <p>옷 번호 : <%=rDTO.getClothes_seq()%>  옷 이름 : <%=rDTO.getClothes_name()%>  옷 정보 : <%=rDTO.getClothes_info()%></p>
                                     </div>
+                                    <br/>
                                     <%
                                             }}
                                     %>
 
                                 </div>
+                            </div>
+                            <div class="card-footer" style="text-align: center;">
+                                <a class="m-0 font-weight-bold text-primary" href="#" data-toggle="modal" data-target="#insertOrder">옷 세탁하기</a>
                             </div>
                         </div>
                     </div>
