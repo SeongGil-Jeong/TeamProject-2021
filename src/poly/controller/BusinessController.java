@@ -25,6 +25,8 @@ public class BusinessController {
 
     @Resource(name = "OrderService")
     private IOrderService orderService;
+
+
     Logger log = Logger.getLogger(this.getClass());
 
     @RequestMapping(value = "business/bnsRegForm")// 회원가입 창 이동
@@ -46,7 +48,9 @@ public class BusinessController {
         log.info(this.getClass().getName() + ".busuness/bnsMain ok!");
         String SS_BNS_SEQ = CmmUtil.nvl((String) session.getAttribute("SS_BNS_SEQ"));
         String msg = "";
+
         BusinessDTO pDTO = new BusinessDTO();
+
         pDTO.setBns_seq(SS_BNS_SEQ);
         List<OrderDTO> rList = orderService.bnsSelectOrder(pDTO);
         if (rList == null) {
