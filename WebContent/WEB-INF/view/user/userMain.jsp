@@ -586,7 +586,7 @@
                     <div class="modal fade" id="insertClothes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
                          aria-hidden="true">
                         <div class="modal-dialog" role="document">
-                            <div class="modal-content">
+                            <div class="modal-content" style="width: 700px;">
                                 <div class="modal-header">
                                     <h5 class="modal-title">옷 추가하기</h5>
                                     <button class="close" type="button" data-dismiss="modal" aria-label="Close" onclick="clearClothesInfo()">
@@ -595,17 +595,35 @@
                                 </div>
                                 <div class="modal-body">
                                     <div>
-                                        <input type="text" name="clothes_name" id="clothes_name" placeholder="옷 이름">
+                                        <input type="text" name="clothes_name" id="clothes_name" placeholder="옷 이름" style="width: 100%;">
+                                    </div>
+                                    <hr/>
+                                    <div>
+                                        <input type="text" name="clothes_type" id="clothes_type" placeholder="옷 type" style="width: 100%;">
+                                    </div>
+                                    <hr/>
+                                    <p>옷 정보</p>
+                                    <div>
+                                        <input type="image" src="/resources/img/da1.jpg" onclick="setClothesInfo('다림질금지')" style="width: 100px;">
+                                        <input type="image" src="/resources/img/da2.jpg"onclick="setClothesInfo('다림질80-120')" style="width: 100px;">
+                                        <input type="image" src="/resources/img/da3.jpg"onclick="setClothesInfo('다림질140-160')" style="width: 100px;">
+                                        <input type="image" src="/resources/img/da4.jpg"onclick="setClothesInfo('다림질180-210')" style="width: 100px;">
+                                        <input type="image" src="/resources/img/dry1.jpg"onclick="setClothesInfo('드라이크리닝금지')" style="width: 100px;">
+                                        <input type="image" src="/resources/img/mul1.jpg"onclick="setClothesInfo('물세탁금지')" style="width: 100px;">
+                                        <input type="image" src="/resources/img/mul2.jpg"onclick="setClothesInfo('손세탁30')" style="width: 100px;">
+                                        <input type="image" src="/resources/img/mul3.jpg"onclick="setClothesInfo('세탁기30')" style="width: 100px;">
+                                        <input type="image" src="/resources/img/mul4.jpg"onclick="setClothesInfo('손세탁세탁기40')" style="width: 100px;">
+                                        <input type="image" src="/resources/img/mul5.jpg"onclick="setClothesInfo('손세탁세탁기60')" style="width: 100px;">
+                                        <input type="image" src="/resources/img/mul6.jpg"onclick="setClothesInfo('손세탁세탁기40삶을수있음')" style="width: 100px;">
+                                        <input type="image" src="/resources/img/pyo1.jpg"onclick="setClothesInfo('산소계염소계표백제금지')" style="width: 100px;">
+                                        <input type="image" src="/resources/img/pyo2.jpg"onclick="setClothesInfo('산소계염소계표백제사용가능')" style="width: 100px;">
+                                        <input type="image" src="/resources/img/pyo3.jpg"onclick="setClothesInfo('산소계표백제금지')" style="width: 100px;">
+                                        <input type="image" src="/resources/img/pyo4.jpg"onclick="setClothesInfo('염소계표백제금지')" style="width: 100px;">
+                                        <input type="image" src="/resources/img/pyo6.jpg"onclick="setClothesInfo('염소계표백제사용가능')" style="width: 100px;">
+
                                     </div>
                                     <div>
-                                        <input type="text" name="clothes_type" id="clothes_type" placeholder="옷 type">
-                                    </div>
-                                    <div>
-                                        <input type="button" onclick="setClothesInfo('물세탁')" value="물세탁">
-                                        <input type="button" onclick="setClothesInfo('드라이 금지')" value="드라이 금지">
-                                    </div>
-                                    <div>
-                                        <input type="text" name="clothes_info" id="clothes_info">
+                                        <input type="text" name="clothes_info" id="clothes_info" style="width: 100%">
                                     </div>
 
                                 </div>
