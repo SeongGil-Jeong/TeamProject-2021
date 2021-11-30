@@ -106,14 +106,8 @@ public class OrderController {
             pDTO.setUser_seq(SS_USER_SEQ);
 
             int res = orderService.deleteOrder(pDTO, order_seqList); // Override 사용
-
-                if (res == 1) {
                     msg = "주문 확인 성공";
                     url = "/user/userMain.do";
-                } else {
-                    msg = "주문 확인 실패";
-                    url = "/user/userMain.do";
-                }
 
             pDTO = null;
         } catch (Exception e) {

@@ -61,7 +61,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Dashboard</title>
+    <title>메인페이지</title>
 
     <!-- Custom fonts for this template-->
     <link href="/resources/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -193,6 +193,43 @@
 
 
     </script>
+    <!-- 옷 리스트 테이블 css -->
+    <style>
+        *:before, *:after {
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        table {
+            max-width: 2000px;
+            margin: 50px ;
+        }
+
+        thead th {
+            background: #0c3390;
+            color: #fff;
+            font-weight: initial;
+        }
+
+        tr {
+            background: #f1f1f1;
+        }
+
+        tr:nth-child(2n) {
+            background: #e0e0e0;
+        }
+
+        th, td {
+            text-align: center;
+            padding: 16px;
+        }
+
+        tfoot tr {
+            background: none;
+        }
+
+    </style>
 
 </head>
 
@@ -209,7 +246,7 @@
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
-            <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+            <div class="sidebar-brand-text mx-3">Washing for me</div>
         </a>
 
         <!-- Divider -->
@@ -495,44 +532,47 @@
                     <div class="col-xl-6 col-lg-5">
                         <div class="card shadow mb-4">
                             <!-- Card Header -->
-                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                 <h6 class="m-0 font-weight-bold text-primary">나의 옷장</h6>
-                                <a class="m-0 font-weight-bold text-primary" href="#" data-toggle="modal" data-target="#insertClothes">옷 추가</a>
+                                <a class="m-0 font-weight-bold text-primary" href="#"
+                                   data-toggle="modal" data-target="#insertClothes">옷 추가</a>
                             </div>
                             <!-- Card Body -->
-                            <div class="card-body" style="overflow: scroll">
-                                <div class="chart-area">
-                                    <% if(clothesRList.size() == 0){%>
-                                    <div>옷이 없습니다.</div>
-                                    <%
-
+                            <div style="overflow: scroll; padding: 0px; height:500px;">
+                                <% if(clothesRList.size() == 0){%>
+                                <div>옷이 없습니다.</div>
+                                <%}%>
+                                <table style="align: center; width: 720px;">
+                                    <thead>
+                                    <tr>
+                                        <th>유형</th>
+                                        <th>번호</th>
+                                        <th>이름</th>
+                                        <th>정보</th>
+                                        <th>삭제</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <%for(ClothesDTO e : clothesRList)  {
+                                        String seq = e.getClothes_seq();
+                                        String type = e.getClothes_type();
                                     %>
-
-                                    <%}else{
-
-
-                                        for (int i = 0; i < clothesRList.size(); i++) {
-                                            ClothesDTO rDTO = clothesRList.get(i);
-
-                                            if (rDTO == null) {
-                                                rDTO = new ClothesDTO();
-                                            }
-                                    %>
-                                    <div style="width: auto; height : auto; border: 3px solid #4e73df;border-radius: 27px 45px 60px 95px;">
-
-                                        <a class="btn btn-danger btn-circle" href="/clothes/deleteClothes.do?clothes_seq=<%=rDTO.getClothes_seq()%>" style="float: right;">
-                                            <i class="fas fa-trash"></i></a>
-                                        <p>옷 번호 : <%=rDTO.getClothes_seq()%>  옷 이름 : <%=rDTO.getClothes_name()%>  옷 정보 : <%=rDTO.getClothes_info()%></p>
-                                    </div>
-                                    <br/>
-                                    <%
-                                            }}
-                                    %>
-
-                                </div>
+                                    <tr>
+                                        <td><img src="/resources/img/clothesImage/<%=type%>.png" alt="<%=type%>"/></td>
+                                        <td><%=seq %></td>
+                                        <td><%=e.getClothes_name() %></td>
+                                        <td><%=e.getClothes_info() %></td>
+                                        <td><a class="btn btn-danger btn-circle" href="/clothes/deleteClothes.do?clothes_seq=<%=seq%>">
+                                            <i class="fas fa-trash"></i></a></td>
+                                    </tr>
+                                    <%} %>
+                                    </tbody>
+                                </table>
                             </div>
                             <div class="card-footer" style="text-align: center;">
-                                <a class="m-0 font-weight-bold text-primary" href="#" data-toggle="modal" data-target="#insertOrder">옷 세탁하기</a>
+                                <a class="m-0 font-weight-bold text-primary" href="#"
+                                   data-toggle="modal" data-target="#insertOrder">옷 세탁하기</a>
                             </div>
                         </div>
                     </div>
@@ -541,8 +581,9 @@
 
                         <!-- Project Card Example -->
                         <div class="card shadow mb-4">
-                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
+                            <div
+                                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                <h6 class="m-0 font-weight-bold text-primary">진행 상황</h6>
                             </div>
                             <div class="card-body">
                                 <% for (int i = 0; i < rList.size(); i++) {
@@ -568,11 +609,15 @@
                                         status = "0";
                                     }
                                 %>
-                                <h4 class="small font-weight-bold">ORDER_NUMBER : <%=rDTO.getOrder_seq()%><span
-                                        class="float-right"><%=status_name%> <%=status%>%</span></h4>
+                                <h4 class="small font-weight-bold">
+                                    ORDER_NUMBER :
+                                    <%=rDTO.getOrder_seq()%><span class="float-right"><%=status_name%>
+											<%=status%>%</span>
+                                </h4>
                                 <div class="progress mb-4">
-                                    <div class="<%=status_color%>" role="progressbar" style="width: <%=status%>%"
-                                         aria-valuenow="<%=status%>" aria-valuemin="0" aria-valuemax="100"></div>
+                                    <div class="<%=status_color%>" role="progressbar"
+                                         style="width: <%=status%>%" aria-valuenow="<%=status%>"
+                                         aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                                 <%
                                     }
@@ -582,119 +627,154 @@
 
 
 
-                    <!-- 옷 등록 modal -->
-                    <div class="modal fade" id="insertClothes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                         aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content" style="width: 700px;">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">옷 추가하기</h5>
-                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close" onclick="clearClothesInfo()">
-                                        <span aria-hidden="true">×</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <div>
-                                        <input type="text" name="clothes_name" id="clothes_name" placeholder="옷 이름" style="width: 100%;">
+                        <!-- 옷 등록 modal -->
+                        <div class="modal fade" id="insertClothes" tabindex="-1"
+                             role="dialog" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content" style="width: 700px;">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">옷 추가하기</h5>
+                                        <button class="close" type="button" data-dismiss="modal"
+                                                aria-label="Close" onclick="clearClothesInfo()">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
                                     </div>
-                                    <hr/>
-                                    <div>
-                                        <input type="text" name="clothes_type" id="clothes_type" placeholder="옷 type" style="width: 100%;">
-                                    </div>
-                                    <hr/>
-                                    <p>옷 정보</p>
-                                    <div>
-                                        <input type="image" src="/resources/img/da1.jpg" onclick="setClothesInfo('다림질금지')" style="width: 100px;">
-                                        <input type="image" src="/resources/img/da2.jpg"onclick="setClothesInfo('다림질80-120')" style="width: 100px;">
-                                        <input type="image" src="/resources/img/da3.jpg"onclick="setClothesInfo('다림질140-160')" style="width: 100px;">
-                                        <input type="image" src="/resources/img/da4.jpg"onclick="setClothesInfo('다림질180-210')" style="width: 100px;">
-                                        <input type="image" src="/resources/img/dry1.jpg"onclick="setClothesInfo('드라이크리닝금지')" style="width: 100px;">
-                                        <input type="image" src="/resources/img/mul1.jpg"onclick="setClothesInfo('물세탁금지')" style="width: 100px;">
-                                        <input type="image" src="/resources/img/mul2.jpg"onclick="setClothesInfo('손세탁30')" style="width: 100px;">
-                                        <input type="image" src="/resources/img/mul3.jpg"onclick="setClothesInfo('세탁기30')" style="width: 100px;">
-                                        <input type="image" src="/resources/img/mul4.jpg"onclick="setClothesInfo('손세탁세탁기40')" style="width: 100px;">
-                                        <input type="image" src="/resources/img/mul5.jpg"onclick="setClothesInfo('손세탁세탁기60')" style="width: 100px;">
-                                        <input type="image" src="/resources/img/mul6.jpg"onclick="setClothesInfo('손세탁세탁기40삶을수있음')" style="width: 100px;">
-                                        <input type="image" src="/resources/img/pyo1.jpg"onclick="setClothesInfo('산소계염소계표백제금지')" style="width: 100px;">
-                                        <input type="image" src="/resources/img/pyo2.jpg"onclick="setClothesInfo('산소계염소계표백제사용가능')" style="width: 100px;">
-                                        <input type="image" src="/resources/img/pyo3.jpg"onclick="setClothesInfo('산소계표백제금지')" style="width: 100px;">
-                                        <input type="image" src="/resources/img/pyo4.jpg"onclick="setClothesInfo('염소계표백제금지')" style="width: 100px;">
-                                        <input type="image" src="/resources/img/pyo6.jpg"onclick="setClothesInfo('염소계표백제사용가능')" style="width: 100px;">
+                                    <div class="modal-body">
+                                        <div>
+                                            <input type="text" name="clothes_name" id="clothes_name"
+                                                   placeholder="옷 이름" style="width: 100%;">
+                                        </div>
+                                        <hr />
+                                        <div>
+                                            <select name="clothes_type" id="clothes_type" style="width: 100%;">
+                                                <option value="none">=== 유형 선택 ===</option>
+                                                <option value="shortshirts">반팔티셔츠</option>
+                                                <option value="longshirts">긴팔티셔츠</option>
+                                                <option value="shortpants">반바지</option>
+                                                <option value="longpants">긴바지</option>
+                                                <option value="skirt">치마</option>
+                                                <option value="dress">원피스</option>
+                                            </select>
+                                        </div>
+                                        <hr />
+                                        <p>옷 정보</p>
+                                        <div>
+                                            <input type="image" src="/resources/img/da1.jpg"
+                                                   onclick="setClothesInfo('다림질금지')" style="width: 100px;">
+                                            <input type="image" src="/resources/img/da2.jpg"
+                                                   onclick="setClothesInfo('다림질80-120')" style="width: 100px;">
+                                            <input type="image" src="/resources/img/da3.jpg"
+                                                   onclick="setClothesInfo('다림질140-160')"
+                                                   style="width: 100px;"> <input type="image"
+                                                                                 src="/resources/img/da4.jpg"
+                                                                                 onclick="setClothesInfo('다림질180-210')"
+                                                                                 style="width: 100px;"> <input type="image"
+                                                                                                               src="/resources/img/dry1.jpg"
+                                                                                                               onclick="setClothesInfo('드라이크리닝금지')" style="width: 100px;">
+                                            <input type="image" src="/resources/img/mul1.jpg"
+                                                   onclick="setClothesInfo('물세탁금지')" style="width: 100px;">
+                                            <input type="image" src="/resources/img/mul2.jpg"
+                                                   onclick="setClothesInfo('손세탁30')" style="width: 100px;">
+                                            <input type="image" src="/resources/img/mul3.jpg"
+                                                   onclick="setClothesInfo('세탁기30')" style="width: 100px;">
+                                            <input type="image" src="/resources/img/mul4.jpg"
+                                                   onclick="setClothesInfo('손세탁세탁기40')" style="width: 100px;">
+                                            <input type="image" src="/resources/img/mul5.jpg"
+                                                   onclick="setClothesInfo('손세탁세탁기60')" style="width: 100px;">
+                                            <input type="image" src="/resources/img/mul6.jpg"
+                                                   onclick="setClothesInfo('손세탁세탁기40삶을수있음')"
+                                                   style="width: 100px;"> <input type="image"
+                                                                                 src="/resources/img/pyo1.jpg"
+                                                                                 onclick="setClothesInfo('산소계염소계표백제금지')"
+                                                                                 style="width: 100px;"> <input type="image"
+                                                                                                               src="/resources/img/pyo2.jpg"
+                                                                                                               onclick="setClothesInfo('산소계염소계표백제사용가능')"
+                                                                                                               style="width: 100px;"> <input type="image"
+                                                                                                                                             src="/resources/img/pyo3.jpg"
+                                                                                                                                             onclick="setClothesInfo('산소계표백제금지')" style="width: 100px;">
+                                            <input type="image" src="/resources/img/pyo4.jpg"
+                                                   onclick="setClothesInfo('염소계표백제금지')" style="width: 100px;">
+                                            <input type="image" src="/resources/img/pyo6.jpg"
+                                                   onclick="setClothesInfo('염소계표백제사용가능')"
+                                                   style="width: 100px;">
+
+                                        </div>
+                                        <div>
+                                            <input type="text" name="clothes_info" id="clothes_info"
+                                                   style="width: 100%">
+                                        </div>
 
                                     </div>
-                                    <div>
-                                        <input type="text" name="clothes_info" id="clothes_info" style="width: 100%">
+                                    <div class="modal-footer">
+                                        <button class="btn btn-secondary" type="button"
+                                                data-dismiss="modal" onclick="clearClothesInfo()">Cancel</button>
+                                        <input type="button" class="btn btn-primary"
+                                               onclick="insertClothes()" value="등록하기">
                                     </div>
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button class="btn btn-secondary" type="button" data-dismiss="modal" onclick="clearClothesInfo()">Cancel</button>
-                                    <input type="button" class="btn btn-primary" onclick="insertClothes()" value="등록하기">
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- 주문 등록 모달창 -->
-                    <div class="modal fade" id="insertOrder" tabindex="-1"
-                         role="dialog" aria-labelledby="exampleModalLabel"
-                         aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">주문 맡길 옷들을 선택해
-                                        주세요</h5>
-                                    <button class="close" type="button" data-dismiss="modal"
-                                            aria-label="Close" onclick="clearInsertOrderName()">
-                                        <span aria-hidden="true">×</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <%
-                                        for (ClothesDTO e : clothesRList) {
-                                            String clothes_seq = e.getClothes_seq();
-                                            String clothes_name = e.getClothes_name();
-                                    %>
-                                    <div>
-                                        옷 정보
-                                        <%=clothes_seq%> : <%=clothes_name%>
-                                        <a onclick="setInsertOrderClassName('<%=clothes_seq%>', '<%=clothes_name%>');"
-                                           class="btn btn-danger btn-circle btn-sm" style="float: right"
-                                           id="insertOrderCheck2<%=clothes_seq%>"> <i
-                                                class="fas fa-trash" id="insertOrderCheck<%=clothes_seq%>">
-                                        </i></a>
+                        <!-- 주문 등록 모달창 -->
+                        <div class="modal fade" id="insertOrder" tabindex="-1"
+                             role="dialog" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">주문 맡길 옷들을 선택해 주세요</h5>
+                                        <button class="close" type="button" data-dismiss="modal"
+                                                aria-label="Close" onclick="clearInsertOrderName()">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
                                     </div>
-                                    <hr>
-                                    <%
+                                    <div class="modal-body">
+                                        <%
+                                            for (ClothesDTO e : clothesRList) {
+                                                String clothes_seq = e.getClothes_seq();
+                                                String clothes_name = e.getClothes_name();
+                                        %>
+                                        <div>
+                                            옷 정보
+                                            <%=clothes_seq%>
+                                            :
+                                            <%=clothes_name%>
+                                            <a
+                                                    onclick="setInsertOrderClassName('<%=clothes_seq%>', '<%=clothes_name%>');"
+                                                    class="btn btn-danger btn-circle btn-sm"
+                                                    style="float: right" id="insertOrderCheck2<%=clothes_seq%>">
+                                                <i class="fas fa-trash"
+                                                   id="insertOrderCheck<%=clothes_seq%>"> </i>
+                                            </a>
+                                        </div>
+                                        <hr>
+                                        <%
 
-                                        }
-                                    %>
-                                    희망 세탁 업소 선택 :
-                                    <select id="selectBNS">
+                                            }
+                                        %>
+                                        희망 세탁 업소 선택 : <select id="selectBNS">
                                         <% for(BusinessDTO e : businessList) {
                                             String bns_seq = e.getBns_seq();
                                             String bns_name = e.getBns_name(); %>
 
-                                        <option value="<%=bns_seq%>"> <%="#"+bns_seq+" : "+bns_name %> </option>
+                                        <option value="<%=bns_seq%>">
+                                            <%="#"+bns_seq+" : "+bns_name %>
+                                        </option>
 
                                         <% }%>
 
-                                    </select>
-
-
-
-                                    <br/>
-                                    ※ 확정 시 취소하실 수 없습니다.
-                                </div>
-                                <div class="modal-footer">
-                                    <button class="btn btn-secondary" type="button"
-                                            data-dismiss="modal" onclick="clearInsertOrderName()">Cancel</button>
-                                    <a class="btn btn-primary" onclick="insertOrder();">주문 확정</a>
+                                    </select> <br /> ※ 확정 시 취소하실 수 없습니다.
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-secondary" type="button"
+                                                data-dismiss="modal" onclick="clearInsertOrderName()">Cancel</button>
+                                        <a class="btn btn-primary" onclick="insertOrder();">주문 확정</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 </div>
 
             </div>
