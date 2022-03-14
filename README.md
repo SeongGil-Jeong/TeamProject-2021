@@ -1,7 +1,7 @@
 # TeamProject-2021
 
 ## Video
-https://user-images.githubusercontent.com/63443366/144043175-9907658d-aa73-4fde-bac8-5468c9154c4e.mp4
+![Video](https://user-images.githubusercontent.com/63443366/144043175-9907658d-aa73-4fde-bac8-5468c9154c4e.mp4)
 
 ---
 
